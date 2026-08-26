@@ -19,12 +19,12 @@ const initials = (name: string) =>
   <PageHeader
     eyebrow="Our team"
     title="The people accountable for the work."
-    lead="A small executive team, all of them long enough in this industry to know what a job actually takes."
+    lead="Owners and project managers, all of them long enough in this industry to know what a job actually takes."
   />
 
   <section class="py-20 sm:py-28">
     <div class="mx-auto max-w-7xl px-5 sm:px-8">
-      <ul class="grid gap-px sm:grid-cols-2 lg:grid-cols-4" style="background: var(--line)">
+      <ul class="grid-hairline grid sm:grid-cols-2 lg:grid-cols-3">
         {
           executives.map((p) => (
             <li class="p-8 sm:p-10" style="background: var(--surface)">
@@ -38,6 +38,14 @@ const initials = (name: string) =>
               <h2 class="mt-6 font-display text-xl">{p.name}</h2>
               <p class="mt-1.5 text-[0.9375rem]" style="color: var(--text-muted)">
                 {p.title}
+                {'market' in p && p.market && (
+                  <>
+                    <span class="mx-1.5" aria-hidden="true">
+                      &middot;
+                    </span>
+                    {p.market}
+                  </>
+                )}
               </p>
             </li>
           ))

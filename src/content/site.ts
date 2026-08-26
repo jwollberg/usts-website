@@ -11,7 +11,10 @@ export const site = {
   legalName: 'US Tower Services, Inc.',
   tagline: 'Keeping People Connected',
   founded: 2002,
-  url: 'https://www.usts1.com',
+  // The public site lives on ustelecomservices.com. usts1.com and
+  // ustowerservicesinc.com forward here; both are mail domains and keep
+  // their own MX records.
+  url: 'https://www.ustelecomservices.com',
   description:
     'US Telecom Services is a wireless infrastructure contractor building and maintaining cell towers, small cells, fiber and commercial electric for the nation’s major carriers. Serving carriers, tower owners and OEMs since 2002.',
 
@@ -86,9 +89,10 @@ export const offices = [
 
 export const executives = [
   { name: 'Ish Ramirez', title: 'President and Owner' },
-  { name: 'Chad Berg', title: 'Owner' },
   { name: 'Ted Chaffin', title: 'Owner' },
   { name: 'Joshua Wollberg', title: 'Director of Operations Support' },
+  { name: 'Javier Moreno Aguilera', title: 'Project Manager', market: 'California' },
+  { name: 'Dave Petit', title: 'Project Manager', market: 'Arizona' },
 ] as const;
 
 /**

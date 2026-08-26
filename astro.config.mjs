@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: 'https://www.usts1.com',
+  site: 'https://www.ustelecomservices.com',
   trailingSlash: 'never',
   integrations: [
     react(),

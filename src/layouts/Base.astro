@@ -15,7 +15,15 @@ interface Props {
 
 const { title, description = site.description, noindex = false, hideCta = false } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site).href.replace(/\/$/, '') || site.url;
+// build.format is 'file', so Astro.url.pathname carries a .html suffix at build
+// time. Left alone, every canonical and og:url would advertise /about.html while
+// the sitemap and every real link say /about — two URLs for one page.
+const cleanPath =
+  Astro.url.pathname
+    .replace(/index\.html$/, '')
+    .replace(/\.html$/, '')
+    .replace(/\/+$/, '') || '/';
+const canonical = new URL(cleanPath, Astro.site).href.replace(/\/$/, '') || site.url;
 const fullTitle = title === 'home' ? `${site.name} | Wireless Infrastructure Contractor` : `${title} | ${site.name}`;
 
 const organizationLd = {
