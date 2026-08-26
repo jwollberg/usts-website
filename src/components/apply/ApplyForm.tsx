@@ -13,7 +13,7 @@ import {
   RESUME_MAX_BYTES,
   RESUME_TYPES,
 } from './options';
-import { TextField, TextArea, SelectField, YesNo, RadioCards, CheckboxField, ErrorText } from './fields';
+import { TextField, TextArea, SelectField, ChoiceSelect, YesNo, RadioCards, CheckboxField, ErrorText } from './fields';
 
 /* ------------------------------------------------------------------ types */
 
@@ -156,6 +156,67 @@ const STORAGE_KEY = 'usts:application:v1';
 
 type Errors = Partial<Record<keyof Data | 'resume', string>>;
 
+/** Field names used in the error summary, so it reads like a checklist. */
+const FIELD_LABELS: Partial<Record<keyof Data | 'resume', string>> = {
+  yearsOld: 'Age',
+  eligibleForUsEmployment: 'Work eligibility',
+  canUndergoBackgroundChecks: 'Background checks',
+  ableToPerformRole: 'Essential functions',
+  firstName: 'First name',
+  lastName: 'Last name',
+  email: 'Email',
+  phone: 'Mobile phone',
+  street1: 'Street address',
+  city: 'City',
+  state: 'State',
+  zip: 'ZIP code',
+  positionId: 'Role',
+  positionOther: 'Role',
+  marketId: 'Market',
+  experience: 'Experience',
+  education: 'Education',
+  askingPay: 'Desired pay',
+  employmentType: 'Employment type',
+  worksMonday: 'Days you can work',
+  travelAvailability: 'Travel availability',
+  canWorkOvertime: 'Overtime',
+  canWorkWeekend: 'Weekends',
+  canWorkOvernight: 'Overnight shifts',
+  canMakeWorkSchedule: 'Set weekly schedule',
+  canMakeLocalCommute: 'Commute',
+  canRelocate: 'Relocation',
+  startingTimeframe: 'Start date',
+  longestEmployment: 'Longest employment',
+  hasValidDriversLicense: 'Driver’s license',
+  driver: 'Company vehicle',
+  hasReliableTransportation: 'Transportation',
+  referralSource: 'How you heard about us',
+  certify: 'Certification',
+  resume: 'Resume',
+};
+
+/**
+ * Looks up an option-set label, comparing numerically. A draft saved before
+ * ChoiceSelect existed can still hold the raw string from the <select>, and a
+ * strict === would show a dash for a question the applicant did answer.
+ */
+function labelFor(options: readonly { value: number; label: string }[], v: number | string | ''): string {
+  if (v === '' || v === null || v === undefined) return '';
+  return options.find((o) => o.value === Number(v))?.label ?? '';
+}
+
+/** Moves focus to the control an error belongs to. */
+function focusField(key: string) {
+  const el =
+    (document.getElementById(key) as HTMLElement | null) ??
+    (document.querySelector(`[name="${key}"]`) as HTMLElement | null);
+  if (!el) return;
+  el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  // sr-only radios can't take visible focus, so focus their styled label.
+  const target = el.classList.contains('sr-only') ? (el.closest('label') as HTMLElement | null) ?? el : el;
+  target.focus({ preventScroll: true });
+}
+
 /* -------------------------------------------------------------- validation */
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -220,7 +281,8 @@ function validateStep(step: number, d: Data, optionsFailed: boolean): Errors {
   }
 
   if (step === 5) {
-    if (!d.certify) e.certify = 'Please confirm before submitting.';
+    if (!d.certify)
+      e.certify = 'Tick the box at the bottom to certify your information is accurate.';
   }
 
   return e;
@@ -487,9 +549,17 @@ export default function ApplyForm() {
             </p>
             {serverError && <p className="mt-2 text-[0.9375rem] text-[var(--text-body)]">{serverError}</p>}
             {!serverError && errorList.length > 0 && (
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-[0.9375rem] text-[var(--text-body)]">
+              <ul className="mt-2 space-y-1.5 text-[0.9375rem]">
                 {errorList.map(([k, v]) => (
-                  <li key={k}>{v}</li>
+                  <li key={k}>
+                    <button
+                      type="button"
+                      onClick={() => focusField(k)}
+                      className="usts-error-link text-left"
+                    >
+                      <strong>{FIELD_LABELS[k as keyof Data] ?? k}</strong> — {v}
+                    </button>
+                  </li>
                 ))}
               </ul>
             )}
@@ -671,7 +741,7 @@ export default function ApplyForm() {
                 onChange={(v) => set('askingPay', v)}
                 error={errors.askingPay}
               />
-              <SelectField
+              <ChoiceSelect
                 id="education"
                 label="Highest level of education"
                 required
@@ -689,7 +759,7 @@ export default function ApplyForm() {
           <>
             <div className="grid gap-8 sm:grid-cols-2">
               <RadioCards id="employmentType" label="Employment type" value={data.employmentType} onChange={(v) => set('employmentType', v)} options={EMPLOYMENT_TYPE} error={errors.employmentType} />
-              <RadioCards id="shiftLength" label="Preferred shift length" required={false} value={data.shiftLength} onChange={(v) => set('shiftLength', v)} options={SHIFT_LENGTH} />
+              <RadioCards id="shiftLength" label="Preferred shift length" hint="Optional. Click an answer again to clear it." required={false} value={data.shiftLength} onChange={(v) => set('shiftLength', v)} options={SHIFT_LENGTH} />
             </div>
 
             <fieldset aria-describedby={errors.worksMonday ? 'days-error' : undefined}>
@@ -708,7 +778,7 @@ export default function ApplyForm() {
               <ErrorText id="days-error">{errors.worksMonday}</ErrorText>
             </fieldset>
 
-            <SelectField id="travelAvailability" label="How long can you travel for at a time?" required value={data.travelAvailability} onChange={(v) => set('travelAvailability', v)} options={TRAVEL} error={errors.travelAvailability} />
+            <ChoiceSelect id="travelAvailability" label="How long can you travel for at a time?" required value={data.travelAvailability} onChange={(v) => set('travelAvailability', v)} options={TRAVEL} error={errors.travelAvailability} />
 
             <div className="grid gap-8 sm:grid-cols-2">
               <YesNo id="canWorkOvertime" label="Are you available for overtime?" value={data.canWorkOvertime} onChange={(v) => set('canWorkOvertime', v)} error={errors.canWorkOvertime} />
@@ -719,7 +789,7 @@ export default function ApplyForm() {
               <YesNo id="canRelocate" label="Would you be willing to relocate?" value={data.canRelocate} onChange={(v) => set('canRelocate', v)} error={errors.canRelocate} />
             </div>
 
-            <SelectField id="startingTimeframe" label="When could you start?" required value={data.startingTimeframe} onChange={(v) => set('startingTimeframe', v)} options={START_TIMEFRAME} error={errors.startingTimeframe} />
+            <ChoiceSelect id="startingTimeframe" label="When could you start?" required value={data.startingTimeframe} onChange={(v) => set('startingTimeframe', v)} options={START_TIMEFRAME} error={errors.startingTimeframe} />
           </>
         )}
 
@@ -754,16 +824,16 @@ export default function ApplyForm() {
               </div>
             </fieldset>
 
-            <SelectField id="longestEmployment" label="How long was your longest period with one employer?" required value={data.longestEmployment} onChange={(v) => set('longestEmployment', v)} options={LONGEST_EMPLOYMENT} error={errors.longestEmployment} />
+            <ChoiceSelect id="longestEmployment" label="How long was your longest period with one employer?" required value={data.longestEmployment} onChange={(v) => set('longestEmployment', v)} options={LONGEST_EMPLOYMENT} error={errors.longestEmployment} />
 
             <div className="grid gap-8 sm:grid-cols-2">
               <YesNo id="hasValidDriversLicense" label="Do you hold a valid driver’s license?" value={data.hasValidDriversLicense} onChange={(v) => set('hasValidDriversLicense', v)} error={errors.hasValidDriversLicense} />
               <YesNo id="driver" label="Are you willing to drive a company vehicle?" value={data.driver} onChange={(v) => set('driver', v)} error={errors.driver} />
               <YesNo id="hasReliableTransportation" label="Do you have reliable transportation to work?" value={data.hasReliableTransportation} onChange={(v) => set('hasReliableTransportation', v)} error={errors.hasReliableTransportation} />
-              <YesNo id="hasMilitaryService" label="Have you served in the U.S. armed forces?" hint="Optional — answering helps us support veterans, and never counts against you." required={false} value={data.hasMilitaryService} onChange={(v) => set('hasMilitaryService', v)} />
+              <YesNo id="hasMilitaryService" label="Have you served in the U.S. armed forces?" hint="Optional — answering helps us support veterans, and never counts against you. Click an answer again to clear it." required={false} value={data.hasMilitaryService} onChange={(v) => set('hasMilitaryService', v)} />
             </div>
 
-            <SelectField id="referralSource" label="How did you hear about us?" required value={data.referralSource} onChange={(v) => set('referralSource', v)} options={REFERRAL} error={errors.referralSource} />
+            <ChoiceSelect id="referralSource" label="How did you hear about us?" required value={data.referralSource} onChange={(v) => set('referralSource', v)} options={REFERRAL} error={errors.referralSource} />
           </>
         )}
 
@@ -806,9 +876,13 @@ export default function ApplyForm() {
                   ['Address', [data.street1, data.street2, `${data.city}, ${data.state} ${data.zip}`].filter(Boolean).join(', ')],
                   ['Role', optionsFailed ? data.positionOther : options?.positions.find((p) => p.id === data.positionId)?.name ?? '—'],
                   ['Market', options?.markets.find((m) => m.id === data.marketId)?.name ?? '—'],
-                  ['Experience', EXPERIENCE.find((o) => o.value === data.experience)?.label ?? '—'],
+                  ['Experience', labelFor(EXPERIENCE, data.experience) || '—'],
                   ['Desired pay', data.askingPay],
-                  ['Available from', START_TIMEFRAME.find((o) => o.value === data.startingTimeframe)?.label ?? '—'],
+                  ['Available from', labelFor(START_TIMEFRAME, data.startingTimeframe) || '—'],
+                  ['Employment type', labelFor(EMPLOYMENT_TYPE, data.employmentType) || '—'],
+                  ['Travel', labelFor(TRAVEL, data.travelAvailability) || '—'],
+                  ['Education', labelFor(EDUCATION, data.education) || '—'],
+                  ['Heard about us', labelFor(REFERRAL, data.referralSource) || '—'],
                 ].map(([k, v]) => (
                   <div key={k} className="grid grid-cols-1 gap-1 px-6 py-3.5 sm:grid-cols-[10rem_1fr]" style={{ borderColor: 'var(--line)' }}>
                     <dt className="text-sm font-medium text-[var(--text-muted)]">{k}</dt>

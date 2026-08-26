@@ -91,14 +91,15 @@ export const US_STATES = [
   'WV', 'WI', 'WY',
 ];
 
+/** Sunday first, matching the Nexus payroll week. */
 export const DAYS = [
+  { key: 'worksSunday', label: 'Sun' },
   { key: 'worksMonday', label: 'Mon' },
   { key: 'worksTuesday', label: 'Tue' },
   { key: 'worksWednesday', label: 'Wed' },
   { key: 'worksThursday', label: 'Thu' },
   { key: 'worksFriday', label: 'Fri' },
   { key: 'worksSaturday', label: 'Sat' },
-  { key: 'worksSunday', label: 'Sun' },
 ] as const;
 
 export const RESUME_MAX_BYTES = 5 * 1024 * 1024;

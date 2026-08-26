@@ -375,6 +375,46 @@
     outline-offset: 2px;
   }
 
+  /* Shown only on optional questions once one has been answered, so a wrong
+     click can be taken back rather than being stuck. */
+  .usts-clear {
+    align-self: center;
+    padding: 0.5rem 0.625rem;
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    background: none;
+    border: 0;
+  }
+  .usts-clear:hover {
+    color: var(--accent);
+  }
+
+  /* Each entry in the error summary jumps to the field it is about. */
+  .usts-error-link {
+    color: var(--text-body);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    text-underline-offset: 3px;
+    cursor: pointer;
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+  }
+  .usts-error-link:hover {
+    color: var(--text-strong);
+    text-decoration-color: var(--accent);
+  }
+  .usts-error-link strong {
+    color: var(--text-strong);
+    font-weight: 600;
+  }
+
   .usts-checkbox {
     appearance: none;
     width: 1.15rem;

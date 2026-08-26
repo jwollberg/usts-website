@@ -12,6 +12,21 @@ import { loadOpenings } from './openings.js';
 
 type Ref = { id: string; name: string };
 
+/**
+ * The markets and offices we actually staff, matching `offices` in
+ * src/content/site.ts. Dataverse still carries rows for markets we no longer
+ * run crews in (Montana is the corporate mailing address, Missouri is dormant),
+ * and offering those on a public application form would contradict the site.
+ */
+const OPERATING_MARKETS = ['California', 'Arizona', 'Utah'];
+const OPERATING_OFFICES = ['Sun Valley', 'Gilbert', 'Salt Lake City'];
+
+/** Applicants search by metro, not by the postal city on the lease. */
+const METRO: Record<string, string> = {
+  'Sun Valley': 'Los Angeles',
+  Gilbert: 'Phoenix',
+};
+
 const loadPositions = () =>
   cached_<Ref[]>('positions', 15 * 60_000, async () => {
     const d = await dvGet<{ value: any[] }>('positions?$select=name,positionid&$orderby=name asc');
@@ -25,7 +40,9 @@ const loadMarkets = () =>
     const d = await dvGet<{ value: any[] }>(
       'cr24f_markets?$select=cr24f_name,cr24f_marketid&$filter=statecode eq 0&$orderby=cr24f_name asc'
     );
-    return d.value.map((m) => ({ id: m.cr24f_marketid, name: m.cr24f_name }));
+    return d.value
+      .filter((m) => OPERATING_MARKETS.includes(m.cr24f_name))
+      .map((m) => ({ id: m.cr24f_marketid, name: m.cr24f_name }));
   });
 
 const loadOffices = () =>
@@ -33,10 +50,15 @@ const loadOffices = () =>
     const d = await dvGet<{ value: any[] }>(
       'cr24f_offices?$select=cr24f_name,cr24f_officeid,cr24f_addressstate&$filter=statecode eq 0&$orderby=cr24f_name asc'
     );
-    return d.value.map((o) => ({
-      id: o.cr24f_officeid,
-      name: o.cr24f_addressstate ? `${o.cr24f_name}, ${o.cr24f_addressstate}` : o.cr24f_name,
-    }));
+    return d.value
+      .filter((o) => OPERATING_OFFICES.includes(o.cr24f_name))
+      .map((o) => {
+        const label = METRO[o.cr24f_name] ?? o.cr24f_name;
+        return {
+          id: o.cr24f_officeid,
+          name: o.cr24f_addressstate ? `${label}, ${o.cr24f_addressstate}` : label,
+        };
+      });
   });
 
 async function handler(_req: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {

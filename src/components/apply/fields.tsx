@@ -194,6 +194,50 @@ export function SelectField({
   );
 }
 
+/**
+ * Select for a Dataverse option set.
+ *
+ * A native <select> always hands back a string, but option-set values are
+ * numbers — comparing the two silently fails, which is what made the review
+ * screen show "—" for answered questions. This converts once, here, so callers
+ * always hold a number.
+ */
+export function ChoiceSelect({
+  id,
+  label,
+  value,
+  onChange,
+  options,
+  error,
+  required,
+  hint,
+  placeholder,
+}: {
+  id: string;
+  label: string;
+  value: number | '';
+  onChange: (v: number | '') => void;
+  options: Choice[];
+  error?: string;
+  required?: boolean;
+  hint?: string;
+  placeholder?: string;
+}) {
+  return (
+    <SelectField
+      id={id}
+      label={label}
+      value={value}
+      onChange={(v) => onChange(v === '' ? '' : Number(v))}
+      options={options}
+      error={error}
+      required={required}
+      hint={hint}
+      placeholder={placeholder}
+    />
+  );
+}
+
 /** Yes/No question rendered as a radio pair — clearer than a checkbox for a
     question that must be answered deliberately. */
 export function YesNo({
@@ -208,7 +252,8 @@ export function YesNo({
   id: string;
   label: string;
   value: boolean | null;
-  onChange: (v: boolean) => void;
+  /** Optional questions can be cleared back to null, so `v` may be null. */
+  onChange: (v: boolean | null) => void;
   error?: string;
   hint?: string;
   required?: boolean;
@@ -237,12 +282,27 @@ export function YesNo({
               name={id}
               checked={value === v}
               onChange={() => onChange(v)}
+              // A radio never fires onChange when it is already selected, so the
+              // clear has to happen on click. `value` here is the pre-click
+              // value, which makes this safe whichever order the events run in.
+              onClick={() => {
+                if (!required && value === v) onChange(null);
+              }}
               className="sr-only"
               aria-invalid={error ? true : undefined}
             />
             {l}
           </label>
         ))}
+        {!required && value !== null && (
+          <button
+            type="button"
+            onClick={() => onChange(null)}
+            className="usts-clear"
+          >
+            Clear
+          </button>
+        )}
       </div>
       <ErrorText id={errId}>{error}</ErrorText>
     </fieldset>
@@ -262,7 +322,8 @@ export function RadioCards({
   id: string;
   label: string;
   value: number | '';
-  onChange: (v: number) => void;
+  /** Optional groups can be cleared back to '', so `v` may be ''. */
+  onChange: (v: number | '') => void;
   options: Choice[];
   error?: string;
   hint?: string;
@@ -289,11 +350,19 @@ export function RadioCards({
               name={id}
               checked={value === o.value}
               onChange={() => onChange(o.value)}
+              onClick={() => {
+                if (!required && value === o.value) onChange('');
+              }}
               className="sr-only"
             />
             {o.label}
           </label>
         ))}
+        {!required && value !== '' && (
+          <button type="button" onClick={() => onChange('')} className="usts-clear">
+            Clear
+          </button>
+        )}
       </div>
       <ErrorText id={errId}>{error}</ErrorText>
     </fieldset>

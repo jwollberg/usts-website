@@ -26,6 +26,15 @@ const QUERY =
   '&$filter=statecode eq 0 and cr24f_openings gt 0' +
   '&$orderby=cr24f_requisitionnumber asc';
 
+/**
+ * Offices are named after their postal city in Dataverse, but applicants search
+ * for the metro. Keep this in step with `label` in src/content/site.ts.
+ */
+const METRO: Record<string, string> = {
+  'Sun Valley': 'Los Angeles',
+  Gilbert: 'Phoenix',
+};
+
 export async function loadOpenings(): Promise<Opening[]> {
   return cached_('openings', 5 * 60_000, async () => {
     const data = await dvGet<{ value: any[] }>(QUERY);
@@ -35,7 +44,11 @@ export async function loadOpenings(): Promise<Opening[]> {
       position: r.cr24f_Position?.name ?? 'Open position',
       market: r.cr24f_Market?.cr24f_name ?? '',
       office: r.cr24f_Office?.cr24f_name ?? '',
-      city: r.cr24f_Office?.cr24f_addresscity ?? r.cr24f_Office?.cr24f_name ?? '',
+      city:
+        METRO[r.cr24f_Office?.cr24f_name] ??
+        r.cr24f_Office?.cr24f_addresscity ??
+        r.cr24f_Office?.cr24f_name ??
+        '',
       state: r.cr24f_Office?.cr24f_addressstate ?? '',
       openings: Number(r.cr24f_openings ?? 0),
     }));
