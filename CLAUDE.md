@@ -68,30 +68,32 @@ All four run in `api/` as small serverless functions:
 
 ### What the website is allowed to touch in Nexus
 
-The site signs in as a dedicated Dataverse identity (`USTS Website`,
-app registration **USTS-Web-Public**) that lives in its own business unit,
-**Web Integrations**, with a single role: **Web Careers Writer**.
+**This repository is public. Nothing sensitive belongs in it.**
 
-It can create applicant and subcontractor-onboarding rows (with their
-attachments) and read the job/market/office lists. It **cannot** read timecards,
-employees, job orders or HR policies, and it cannot delete anything — verified
-by test. The separate business unit is what makes that true:
-users in the main business unit automatically inherit thirteen roles from its
-default team, so an integration identity parked there would see far too much.
+The site signs in to Dataverse as a dedicated, deliberately narrow identity. It
+can create job applications and subcontractor-onboarding rows and read the list
+of open roles. It cannot read timecards, employees, job orders or HR policies,
+and it cannot delete anything — all verified by an automated check.
 
-> **Don't move that user back into the main business unit**, and don't add roles
-> to it. That would silently hand a public web endpoint the run of Nexus.
+The full setup, the reasoning behind it, and the operational procedures
+(including rotating the credential before it expires) live **outside this repo**,
+in the private USTS workspace under `docs/website/` — `runbook.md` and
+`verify-permissions.ps1`.
+
+> If you are changing anything about how the site talks to Dataverse, read that
+> runbook first. There is a specific trap documented there that would otherwise
+> silently hand this public website far more access to Nexus than it should have.
 
 ### Secrets
 
-Nothing sensitive is in this repo. The credentials live in the Static Web App's
-application settings in Azure:
+There are none in this repo, and none should ever be added. Credentials live in
+the Static Web App's application settings in Azure and are set from the command
+line. The setting names are `TENANT_ID`, `DV_URL`, `DV_CLIENT_ID`,
+`DV_CLIENT_SECRET`, `BRANDED_EMAIL_FLOW_URL` and `CONTACT_TO`; the values exist
+only in Azure.
 
-`TENANT_ID`, `DV_URL`, `DV_CLIENT_ID`, `DV_CLIENT_SECRET`,
-`BRANDED_EMAIL_FLOW_URL`, `CONTACT_TO`.
-
-**`DV_CLIENT_SECRET` expires and must be replaced before then** — see
-`docs/runbook.md` for how.
+**`DV_CLIENT_SECRET` expires and must be replaced before it does**, or the job
+application form stops working. The runbook has the procedure.
 
 ## Running it on your own machine
 
@@ -109,8 +111,15 @@ Handy scripts:
 ```bash
 node scripts/shot.mjs / /careers --width 1440 --full   # screenshot pages for review
 node scripts/form-test.mjs                             # click through the application form
+node scripts/live-check.mjs <url>                      # walk the whole application form
+node scripts/csp-check.mjs <url>                       # nothing blocked, forms render
+node scripts/text-check.mjs <url>                      # words run together across a link
 node scripts/make-og.mjs                               # regenerate the link-preview image
 ```
+
+Run `csp-check` and `text-check` against the deployed URL after any change to the
+layout or the security headers. Both catch things a build cannot: the CSP one
+found the careers list silently broken in production.
 
 > If the dev server ever throws `_jsxDEV is not a function`, delete
 > `node_modules/.vite` and start it again. Running a build and the dev server
