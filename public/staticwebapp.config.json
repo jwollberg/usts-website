@@ -29,14 +29,6 @@
       "statusCode": 301
     }
   ],
-  "navigationFallback": {
-    "rewrite": "/404.html",
-    "exclude": [
-      "/api/*",
-      "/*.{png,jpg,jpeg,gif,svg,webp,avif,ico,css,js,xml,txt,woff,woff2}",
-      "/subcontractors*"
-    ]
-  },
   "responseOverrides": {
     "404": {
       "rewrite": "/404.html",

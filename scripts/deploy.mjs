@@ -9,7 +9,7 @@
  * The deployment token is read from Azure at run time and never stored here.
  * Requires `az login` with access to the USTS subscription.
  */
-import { execFileSync, execSync } from 'node:child_process';
+import { execSync } from 'node:child_process';
 
 const SUB = '2f7fad7e-5796-4a12-a1b6-52db53dbacba';
 const RG = 'rg-usts-web-cus';
@@ -23,11 +23,12 @@ run('pnpm build');
 console.log('\n> fetching the deployment token from Azure');
 let token;
 try {
-  token = execFileSync(
-    'az',
-    ['staticwebapp', 'secrets', 'list', '--subscription', SUB, '-n', APP, '-g', RG,
-     '--query', 'properties.apiKey', '-o', 'tsv'],
-    { encoding: 'utf8', shell: true }
+  // All arguments are constants defined above, so there is nothing here for a
+  // shell to interpolate.
+  token = execSync(
+    `az staticwebapp secrets list --subscription ${SUB} -n ${APP} -g ${RG}` +
+      ' --query properties.apiKey -o tsv',
+    { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'] }
   ).trim();
 } catch {
   console.error('\nCould not read the deployment token. Run `az login` and try again.');
