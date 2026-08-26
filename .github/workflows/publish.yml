@@ -2,7 +2,7 @@
 #
 # A pull request gets its own temporary preview URL, and closing the PR tears
 # that preview down again.
-name: Deploy to Azure Static Web Apps
+name: Publish
 
 on:
   push:
@@ -14,7 +14,7 @@ on:
     branches: [main]
 
 concurrency:
-  group: swa-${{ github.ref }}
+  group: publish-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
