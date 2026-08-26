@@ -72,21 +72,21 @@ const steps = [
             </h2>
             <ul class="mt-4 space-y-3 text-[0.9375rem]" style="color: var(--text-body)">
               <li class="flex gap-2.5">
-                <span style="color: var(--accent)" aria-hidden="true">&bull;</span>
-                Your certificate of insurance must name <strong>{site.legalName}</strong> as certificate holder.
+                <span class="flex-none" style="color: var(--accent)" aria-hidden="true">&bull;</span>
+                <span>Your certificate of insurance must name <strong>{site.legalName}</strong> as certificate holder.</span>
               </li>
               <li class="flex gap-2.5">
-                <span style="color: var(--accent)" aria-hidden="true">&bull;</span>
-                The W-9 needs to be current and signed — an unsigned one will hold up payment.
+                <span class="flex-none" style="color: var(--accent)" aria-hidden="true">&bull;</span>
+                <span>The W-9 needs to be current and signed — an unsigned one will hold up payment.</span>
               </li>
               <li class="flex gap-2.5">
-                <span style="color: var(--accent)" aria-hidden="true">&bull;</span>
-                Quote against the scope you were given. If the scope is unclear, ask your USTS contact before
-                quoting.
+                <span class="flex-none" style="color: var(--accent)" aria-hidden="true">&bull;</span>
+                <span>Quote against the scope you were given. If the scope is unclear, ask your USTS contact
+                before quoting.</span>
               </li>
             </ul>
             <p class="mt-5 border-t pt-5 text-sm" style="border-color: var(--line); color: var(--text-muted)">
-              Trouble with the form? Email everything to
+              Trouble with the form? Email everything to{' '}
               <a href={`mailto:${site.email}`} class="sub-link">{site.email}</a>.
             </p>
           </div>

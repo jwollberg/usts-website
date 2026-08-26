@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* Self-hosted rather than Google Fonts: the external stylesheet was the single
+   biggest render-blocking request on the page (~1.9s of the first paint), and
+   hosting them ourselves also lets the CSP drop two third-party origins. */
+@import "@fontsource-variable/archivo";
+@import "@fontsource-variable/inter";
+
 /* ------------------------------------------------------------------
    Brand tokens.
 
@@ -39,8 +45,8 @@
   --color-cream-200: #efe9dc;
   --color-cream-300: #d9cfb8;
 
-  --font-display: "Archivo", "Segoe UI", system-ui, sans-serif;
-  --font-sans: "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-display: "Archivo Variable", "Segoe UI", system-ui, sans-serif;
+  --font-sans: "Inter Variable", "Segoe UI", system-ui, sans-serif;
 
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -67,6 +73,11 @@
 
   --accent: var(--color-flag-500);
   --accent-hover: var(--color-flag-600);
+  /* Filled buttons carry white text, so their background needs >=4.5:1 against
+     white. That is a tighter constraint than --accent, which only has to be
+     readable ON the page background — hence a separate token. */
+  --accent-solid: var(--color-flag-500);
+  --accent-solid-hover: var(--color-flag-600);
   --brand: var(--color-navy-500);
 
   --shadow-card: 0 1px 2px rgb(19 18 38 / 0.04), 0 8px 24px -12px rgb(19 18 38 / 0.12);
@@ -101,6 +112,10 @@
 
     --accent: #d2586a;
     --accent-hover: #e07887;
+    /* #d2586a gives white text only 3.92:1 — these are the darkest reds that
+       still clear 4.5:1 while reading as red on a near-black page. */
+    --accent-solid: #c62e43;
+    --accent-solid-hover: #d13c50;
     --brand: #8886c4;
 
     --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
@@ -130,6 +145,8 @@
 
   --accent: #d2586a;
   --accent-hover: #e07887;
+  --accent-solid: #c62e43;
+  --accent-solid-hover: #d13c50;
   --brand: #8886c4;
 
   --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
@@ -243,11 +260,11 @@
   }
 
   .btn-primary {
-    background: var(--accent);
+    background: var(--accent-solid);
     color: #fff;
   }
   .btn-primary:hover {
-    background: var(--accent-hover);
+    background: var(--accent-solid-hover);
   }
 
   .btn-secondary {
