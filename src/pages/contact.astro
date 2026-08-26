@@ -29,7 +29,7 @@ import { site, offices } from '../content/site';
               Reach us directly
             </h2>
             <p class="mt-5">
-              <a href={`mailto:${site.email}`} class="contact-link font-display text-lg font-semibold">
+              <a href={`mailto:${site.email}`} class="text-link font-display text-lg font-semibold">
                 {site.email}
               </a>
             </p>
@@ -66,15 +66,15 @@ import { site, offices } from '../content/site';
             </h2>
             <ul class="mt-4 space-y-2.5 text-[0.9375rem]">
               <li>
-                <a href="/careers" class="contact-link">Applying for a job</a>
+                <a href="/careers" class="text-link">Applying for a job</a>
                 <span style="color: var(--text-muted)"> — see open roles</span>
               </li>
               <li>
-                <a href="/contractors" class="contact-link">Subcontractor onboarding</a>
+                <a href="/contractors" class="text-link">Subcontractor onboarding</a>
                 <span style="color: var(--text-muted)"> — quote, W-9 and COI</span>
               </li>
               <li>
-                <a href="/employees" class="contact-link">Current employee</a>
+                <a href="/employees" class="text-link">Current employee</a>
                 <span style="color: var(--text-muted)"> — My Nexus and Nexus</span>
               </li>
             </ul>
@@ -85,13 +85,3 @@ import { site, offices } from '../content/site';
   </section>
 </Base>
 
-<style>
-  .contact-link {
-    color: var(--accent);
-  }
-  .contact-link:hover {
-    color: var(--accent-hover);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-</style>

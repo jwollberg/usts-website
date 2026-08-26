@@ -61,25 +61,15 @@ const initials = (name: string) =>
             analysis.
           </p>
           <p>
-            If that sounds like work you want to do, <a href="/careers" class="team-link">we are hiring</a>.
+            If that sounds like work you want to do, <a href="/careers" class="text-link">we are hiring</a>.
           </p>
         </div>
       </div>
 
       <p class="mt-16 text-sm" style="color: var(--text-muted)">
-        Media or partnership inquiries: <a href={`mailto:${site.email}`} class="team-link">{site.email}</a>
+        Media or partnership inquiries: <a href={`mailto:${site.email}`} class="text-link">{site.email}</a>
       </p>
     </div>
   </section>
 </Base>
 
-<style>
-  .team-link {
-    color: var(--accent);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-  .team-link:hover {
-    color: var(--accent-hover);
-  }
-</style>

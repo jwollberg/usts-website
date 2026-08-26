@@ -85,7 +85,7 @@ const updated = 'August 2026';
         <h2 class="mt-12 text-2xl">Your choices</h2>
         <p>
           You can ask us what we hold about you, ask us to correct it, or ask us to delete it. Email{' '}
-          <a href={`mailto:${site.email}`} class="privacy-link">{site.email}</a> and we will respond.
+          <a href={`mailto:${site.email}`} class="text-link">{site.email}</a> and we will respond.
           Depending on where you live you may have additional rights under state law, including in
           California — we will honor those requests regardless of where you live.
         </p>
@@ -103,7 +103,7 @@ const updated = 'August 2026';
           <br />
           {site.mailing.street}, {site.mailing.city}, {site.mailing.state} {site.mailing.zip}
           <br />
-          <a href={`mailto:${site.email}`} class="privacy-link">{site.email}</a>
+          <a href={`mailto:${site.email}`} class="text-link">{site.email}</a>
         </p>
       </div>
     </div>
@@ -111,11 +111,6 @@ const updated = 'August 2026';
 </Base>
 
 <style>
-  .privacy-link {
-    color: var(--accent);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
   .prose-usts h2 {
     color: var(--text-strong);
   }

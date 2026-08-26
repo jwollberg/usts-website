@@ -64,7 +64,7 @@ const benefits = [
         <div class="card mt-12 p-8">
           <p class="leading-relaxed" style="color: var(--text-body)">
             Our live list of openings needs JavaScript. You can still
-            <a href="/careers/apply" class="careers-link">submit an application</a> — tell us the role and
+            <a href="/careers/apply" class="text-link">submit an application</a> — tell us the role and
             market you are after and a recruiter will get back to you.
           </p>
         </div>
@@ -140,11 +140,10 @@ const benefits = [
 </script>
 
 <style>
-  .careers-link,
+  /* :global because these are written into the page by scripts/openings.ts,
+     so Astro's scoping attribute is never applied to them. */
   :global(.apply-link) {
     color: var(--accent);
-  }
-  :global(.apply-link) {
     transition: gap 0.18s var(--ease-out-quint);
   }
   :global(.apply-link:hover) {

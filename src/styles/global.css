@@ -294,6 +294,21 @@
     border-color: rgb(255 255 255 / 0.6);
   }
 
+  /* A link sitting inside a sentence must be distinguishable by more than
+     colour, so these are always underlined — not just on hover. Navigational
+     links that stand alone (nav, buttons, the back arrow) are exempt because
+     their position already marks them out. */
+  .text-link {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  .text-link:hover {
+    color: var(--accent-hover);
+    text-decoration-thickness: 2px;
+  }
+
   .card {
     background: var(--surface-raised);
     border: 1px solid var(--line);

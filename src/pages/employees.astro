@@ -91,7 +91,7 @@ import { employeeApps, site } from '../content/site';
             </div>
           </dl>
           <p class="mt-8 border-t pt-6 text-sm" style="border-color: var(--line); color: var(--text-muted)">
-            Still stuck? Email <a href={`mailto:${site.email}`} class="emp-link">{site.email}</a>, or ask your
+            Still stuck? Email <a href={`mailto:${site.email}`} class="text-link">{site.email}</a>, or ask your
             supervisor to raise it for you.
           </p>
         </div>
@@ -100,13 +100,3 @@ import { employeeApps, site } from '../content/site';
   </section>
 </Base>
 
-<style>
-  .emp-link {
-    color: var(--accent);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-  .emp-link:hover {
-    color: var(--accent-hover);
-  }
-</style>

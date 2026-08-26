@@ -87,7 +87,7 @@ const steps = [
             </ul>
             <p class="mt-5 border-t pt-5 text-sm" style="border-color: var(--line); color: var(--text-muted)">
               Trouble with the form? Email everything to{' '}
-              <a href={`mailto:${site.email}`} class="sub-link">{site.email}</a>.
+              <a href={`mailto:${site.email}`} class="text-link">{site.email}</a>.
             </p>
           </div>
 
@@ -97,11 +97,11 @@ const steps = [
             </h2>
             <ul class="mt-4 space-y-2.5 text-[0.9375rem]">
               <li>
-                <a href="/careers" class="sub-link">Looking for a job</a>
+                <a href="/careers" class="text-link">Looking for a job</a>
                 <span style="color: var(--text-muted)"> — see open roles</span>
               </li>
               <li>
-                <a href="/contact" class="sub-link">Need a quote from us</a>
+                <a href="/contact" class="text-link">Need a quote from us</a>
                 <span style="color: var(--text-muted)"> — get in touch</span>
               </li>
             </ul>
@@ -112,13 +112,3 @@ const steps = [
   </section>
 </Base>
 
-<style>
-  .sub-link {
-    color: var(--accent);
-  }
-  .sub-link:hover {
-    color: var(--accent-hover);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-</style>
