@@ -18,8 +18,10 @@ export const site = {
   description:
     'US Telecom Services is a wireless infrastructure contractor building and maintaining cell towers, small cells, fiber and commercial electric for the nation’s major carriers. Serving carriers, tower owners and OEMs since 2002.',
 
-  email: 'info@usts1.com',
-  // No public phone number by choice: inbound goes to info@usts1.com so it is
+  // Both info@ addresses reach the same Info distribution list; this one is
+  // shown because it matches the domain the site lives on.
+  email: 'info@ustelecomservices.com',
+  // No public phone number by choice: inbound goes to info@ustelecomservices.com so it is
   // tracked and routed. Don't add one back without asking Josh.
 
   mailing: {

@@ -171,8 +171,8 @@ export default function ContractorForm() {
             {serverError ? (
               <p className="mt-2 text-[0.9375rem] text-[var(--text-body)]">
                 {serverError} You can also email the documents to{' '}
-                <a href="mailto:info@usts1.com" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>
-                  info@usts1.com
+                <a href="mailto:info@ustelecomservices.com" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>
+                  info@ustelecomservices.com
                 </a>
                 .
               </p>

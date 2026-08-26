@@ -205,51 +205,33 @@ Every step reverses in a minute:
 
 # Remaining
 
-Three things, in the order they matter:
+### 1. The bare domain (`ustelecomservices.com`) — waiting on Azure
 
-### 1. Finish the bare domain (`ustelecomservices.com`, no `www`)
+The `TXT @` record is in and correct. Azure is validating; once it completes we
+send you an IP to replace the `A @ Parked` row, and the bare domain will serve
+the site. Nothing for you to do until then.
 
-It still shows a GoDaddy parked page. Azure is waiting on an ownership record it
-expects at the **root**, not under `www`:
+After it goes live, the `TXT _dnsauth.www` record can be deleted — it is the
+same value in the wrong place and is no longer doing anything.
 
-| Action | Type | Name | Value |
-|---|---|---|---|
-| **Add** | `TXT` | `@` | `_9ms45nu9xtbnrju09dtosantpewje06` |
-| **Then delete** | `TXT` | `_dnsauth.www` | *(same value, wrong place)* |
+### 2. `ustowerservicesinc.com` is forwarding to itself
 
-Add first, tell us it validated, then delete. We then send an IP to replace the
-`A @ Parked` record.
+The Wix records are gone — good. But the forward is currently set to
+`https://www.ustowerservicesinc.com`, which points back at the same domain rather
+than at the new site:
 
-### 2. Retire the Wix site (`ustowerservicesinc.com`)
-
-Still serving the old site. Remove these two:
-
-| Type | Name | Current value |
-|---|---|---|
-| `A` | `@` | `185.230.63.107` |
-| `CNAME` | `www` | `pointing.wixdns.net` |
-
-Then set Forwarding → `https://www.ustelecomservices.com`, permanent (301).
-**Leave its MX, SPF and autodiscover records alone** — it carries mail.
-
-### 3. Create an address on the new domain
-
-DNS is done; the domain just has no addresses on it yet. `info@` is a
-distribution list whose primary is `info@ustowerservicesinc.com` and which
-already carries `info@usts1.com`. Adding `info@ustelecomservices.com` to it takes
-one line, but it has to be done in Exchange — Graph refuses to edit distribution
-lists, and the ops app has no Exchange rights by design.
-
-In the Exchange admin center: **Recipients → Groups → Info → Email addresses →
-Add** `info@ustelecomservices.com`.
-
-Or from PowerShell:
-
-```powershell
-Connect-ExchangeOnline -UserPrincipalName joshw@usts1.com
-Set-DistributionGroup -Identity 'info@ustowerservicesinc.com' `
-  -EmailAddresses @{Add='info@ustelecomservices.com'}
+```
+http://ustowerservicesinc.com
+  → https://ustowerservicesinc.com
+  → https://www.ustowerservicesinc.com    ← dead end
 ```
 
-Once that exists, the website's contact address can move to it — that is a
-one-line change in `src/content/site.ts`.
+**Change the forwarding destination to `https://www.ustelecomservices.com`.**
+If GoDaddy offers a "forward to www" option, make sure it is pointing at the new
+domain and not at this one.
+
+### 3. Email address ✅ DONE
+
+`info@ustelecomservices.com` now reaches the same **Info** distribution list as
+`info@usts1.com` and `info@ustowerservicesinc.com`. The website and its contact
+form have been switched over to it.

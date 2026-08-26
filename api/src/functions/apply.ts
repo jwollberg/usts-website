@@ -194,7 +194,7 @@ async function handler(req: HttpRequest, context: InvocationContext): Promise<Ht
     context.error('apply: create failed', err);
     return json(502, {
       ok: false,
-      message: 'We could not file your application. Please try again, or email info@usts1.com.',
+      message: 'We could not file your application. Please try again, or email info@ustelecomservices.com.',
     });
   }
 
