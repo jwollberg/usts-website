@@ -4,11 +4,13 @@
   "routes": [
     {
       "route": "/api/*",
-      "allowedRoles": ["anonymous"]
+      "allowedRoles": [
+        "anonymous"
+      ]
     },
     {
-      "route": "/contractors",
-      "redirect": "https://ustsportal.powerappsportals.com/contractors/",
+      "route": "/subcontractors",
+      "redirect": "/contractors",
       "statusCode": 301
     },
     {
@@ -29,7 +31,10 @@
   ],
   "navigationFallback": {
     "rewrite": "/404.html",
-    "exclude": ["/api/*", "/*.{png,jpg,jpeg,gif,svg,webp,avif,ico,css,js,xml,txt,woff,woff2}"]
+    "exclude": [
+      "/api/*",
+      "/*.{png,jpg,jpeg,gif,svg,webp,avif,ico,css,js,xml,txt,woff,woff2}"
+    ]
   },
   "responseOverrides": {
     "404": {

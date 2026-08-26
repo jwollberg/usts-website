@@ -28,18 +28,14 @@ import { site, offices } from '../content/site';
             <h2 class="font-display text-xs font-semibold tracking-[0.14em] uppercase" style="color: var(--text-strong)">
               Reach us directly
             </h2>
-            <ul class="mt-5 space-y-3">
-              <li>
-                <a href={`mailto:${site.email}`} class="contact-link font-display text-lg font-semibold">
-                  {site.email}
-                </a>
-              </li>
-              <li>
-                <a href={`tel:${site.phoneHref}`} class="contact-link font-display text-lg font-semibold">
-                  {site.phone}
-                </a>
-              </li>
-            </ul>
+            <p class="mt-5">
+              <a href={`mailto:${site.email}`} class="contact-link font-display text-lg font-semibold">
+                {site.email}
+              </a>
+            </p>
+            <p class="mt-3 text-sm" style="color: var(--text-muted)">
+              Email is the fastest way to reach us — it goes straight to the team who can answer.
+            </p>
           </div>
 
           <div>
@@ -74,9 +70,7 @@ import { site, offices } from '../content/site';
                 <span style="color: var(--text-muted)"> — see open roles</span>
               </li>
               <li>
-                <a href="https://ustsportal.powerappsportals.com/contractors/" class="contact-link" rel="noopener">
-                  Subcontractor onboarding
-                </a>
+                <a href="/contractors" class="contact-link">Subcontractor onboarding</a>
                 <span style="color: var(--text-muted)"> — quote, W-9 and COI</span>
               </li>
               <li>

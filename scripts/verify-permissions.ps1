@@ -81,8 +81,13 @@ if ($resp) {
 
   Expect-Denied 'delete own row' { Invoke-RestMethod -Method DELETE -Headers $h "$api/cr24f_applicants($id)" }
 
-  # Clean up with the admin identity, since the web user deliberately cannot delete.
+  # Clean up with the admin identity, since the web user deliberately cannot
+  # delete. Verify the row is actually gone rather than assuming -- a failed
+  # delete here leaves junk sitting in the recruiting pipeline.
   $adm = & "C:\Projects\USTS\scripts\token.ps1" -Resource $envUrl
-  Invoke-RestMethod -Method DELETE -Headers @{ Authorization = "Bearer $adm" } "$api/cr24f_applicants($id)" | Out-Null
-  Write-Host "PASS  test row deleted by admin"
+  $ah = @{ Authorization = "Bearer $adm"; 'OData-MaxVersion' = '4.0'; 'OData-Version' = '4.0'; Accept = 'application/json' }
+  try { Invoke-RestMethod -Method DELETE -Headers $ah "$api/cr24f_applicants($id)" | Out-Null } catch { }
+  $still = (Invoke-RestMethod -Headers $ah "$api/cr24f_applicants?`$select=cr24f_applicantid&`$filter=cr24f_applicantid eq $id").value
+  if ($still.Count -eq 0) { Write-Host "PASS  test row removed" }
+  else { Write-Host "FAIL  TEST ROW $id STILL EXISTS - delete it manually" }
 }

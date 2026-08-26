@@ -64,6 +64,7 @@ All three run in `api/` as small serverless functions:
 | **Job application** | Creates a row in Dataverse `cr24f_applicant` — the same table the recruiting team already works from. Resume attaches to the `cr24f_resume` file column. |
 | **Open positions list** | Reads live from Dataverse `cr24f_requisition` (active, with at least one opening). No rebuild needed when a job opens or closes. |
 | **Contact form** | Posts to the existing "Nexus - Send Branded Email" flow, which emails `info@usts1.com`. |
+| **Subcontractor onboarding** | Creates a row in Dataverse `cr24f_contractoronboardingrequest` with the quote, W-9 and COI attached as notes — same place the old Power Pages form put them. |
 
 ### What the website is allowed to touch in Nexus
 
@@ -71,9 +72,10 @@ The site signs in as a dedicated Dataverse identity (`USTS Website`,
 app registration **USTS-Web-Public**) that lives in its own business unit,
 **Web Integrations**, with a single role: **Web Careers Writer**.
 
-It can create an applicant and read the job/market/office lists. It **cannot**
-read timecards, employees, job orders or HR policies, and it cannot delete
-anything — verified by test. The separate business unit is what makes that true:
+It can create applicant and subcontractor-onboarding rows (with their
+attachments) and read the job/market/office lists. It **cannot** read timecards,
+employees, job orders or HR policies, and it cannot delete anything — verified
+by test. The separate business unit is what makes that true:
 users in the main business unit automatically inherit thirteen roles from its
 default team, so an integration identity parked there would see far too much.
 
@@ -121,6 +123,9 @@ node scripts/make-og.mjs                               # regenerate the link-pre
   offer. That is a legal and breach-liability problem; Nexus already collects it
   at onboarding, which is the right point. The privacy notice says we don't ask —
   keep that true.
+- **Each subcontractor document has its own upload slot** (quote, W-9, COI). The
+  old form had a single unlabelled box, so what arrived was a pile of files
+  nobody could tell apart. The slots are also what name the note in Dataverse.
 - **No stock photography.** The images on the old Wix site look licensed and we
   can't prove we own them. The site is built to look right with typography and
   the logo instead. Real job-site photos from Josh would improve it a lot.
@@ -132,5 +137,7 @@ node scripts/make-og.mjs                               # regenerate the link-pre
 - Josh to sign off on the wording, especially "120+ years combined experience"
   and the "100% Satisfaction on Your First Job, or it's Free" guarantee.
 - Real photography.
-- Contractor onboarding is still on the old Power Pages portal; the site links to
-  it. Porting it here is what would let that portal be switched off.
+- **The Power Pages portal (`ustsportal.powerappsportals.com`) can now be switched
+  off.** Both of its forms — careers and contractor onboarding — live here and
+  write to the same Dataverse tables. Nothing on this site links to it any more.
+  Check nothing else points at it before retiring it.

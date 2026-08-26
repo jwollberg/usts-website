@@ -16,8 +16,8 @@ export const site = {
     'US Telecom Services is a wireless infrastructure contractor building and maintaining cell towers, small cells, fiber and commercial electric for the nation’s major carriers. Serving carriers, tower owners and OEMs since 2002.',
 
   email: 'info@usts1.com',
-  phone: '636-497-2898',
-  phoneHref: '+16364972898',
+  // No public phone number by choice: inbound goes to info@usts1.com so it is
+  // tracked and routed. Don't add one back without asking Josh.
 
   mailing: {
     street: 'PO Box 17003',
@@ -207,5 +207,6 @@ export const nav = [
   { label: 'About', href: '/about' },
   { label: 'Team', href: '/team' },
   { label: 'Careers', href: '/careers' },
+  { label: 'Subcontractors', href: '/contractors' },
   { label: 'Contact', href: '/contact' },
 ] as const;

@@ -95,8 +95,7 @@ export default function ContactForm() {
           Message sent.
         </h2>
         <p className="mt-3 max-w-lg leading-relaxed text-[var(--text-body)]">
-          Thanks, {name.split(' ')[0]}. We have it, and someone will get back to you at {email}. If it is
-          urgent, call us on 636-497-2898.
+          Thanks, {name.split(' ')[0]}. We have it, and someone will get back to you at {email}.
         </p>
       </div>
     );
