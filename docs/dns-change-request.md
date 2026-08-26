@@ -90,10 +90,13 @@ Once that validates we send you an IP address, and you replace the parked record
 **Do not re-enable Domain Forwarding on this domain.** It would take the `www`
 record back over and the site would go down.
 
-## Stage 3 — email for this domain
+## Stage 3 — email for this domain ✅ RECORDS DONE
 
-The domain is already verified and switched on for email in Microsoft 365. Add
-these three records and mailboxes can start using it.
+All three records are live, and the domain is verified and switched on for email
+in Microsoft 365. **The DNS side of email is finished.**
+
+What is still needed is an actual address on the domain — see "Remaining" at the
+bottom.
 
 | Type | Name / Host | Value | Priority | TTL |
 |---|---|---|---|---|
@@ -120,7 +123,12 @@ them unless we ask.
 
 ---
 
-# Domain 2 — usts1.com (forward only, keep email)
+# Domain 2 — usts1.com ✅ DONE
+
+Forwarding now sends it to the new site, and its email records are untouched.
+Nothing further needed.
+
+<details><summary>Original instructions</summary>
 
 **Change the domain forwarding.** It currently forwards to
 `http://ustowerservicesinc.com`. Repoint it to:
@@ -134,6 +142,8 @@ Permanent (301). If GoDaddy offers to include subdomains, include them so
 
 **Nothing else on this domain changes.** Re-read the "Do not touch" list above
 before saving.
+
+</details>
 
 ---
 
@@ -190,3 +200,56 @@ Every step reverses in a minute:
 - After cutover: confirm `https://www.ustelecomservices.com` serves the site with
   a valid certificate, that both old domains forward correctly, and — most
   importantly — that mail is still flowing on all domains.
+
+---
+
+# Remaining
+
+Three things, in the order they matter:
+
+### 1. Finish the bare domain (`ustelecomservices.com`, no `www`)
+
+It still shows a GoDaddy parked page. Azure is waiting on an ownership record it
+expects at the **root**, not under `www`:
+
+| Action | Type | Name | Value |
+|---|---|---|---|
+| **Add** | `TXT` | `@` | `_9ms45nu9xtbnrju09dtosantpewje06` |
+| **Then delete** | `TXT` | `_dnsauth.www` | *(same value, wrong place)* |
+
+Add first, tell us it validated, then delete. We then send an IP to replace the
+`A @ Parked` record.
+
+### 2. Retire the Wix site (`ustowerservicesinc.com`)
+
+Still serving the old site. Remove these two:
+
+| Type | Name | Current value |
+|---|---|---|
+| `A` | `@` | `185.230.63.107` |
+| `CNAME` | `www` | `pointing.wixdns.net` |
+
+Then set Forwarding → `https://www.ustelecomservices.com`, permanent (301).
+**Leave its MX, SPF and autodiscover records alone** — it carries mail.
+
+### 3. Create an address on the new domain
+
+DNS is done; the domain just has no addresses on it yet. `info@` is a
+distribution list whose primary is `info@ustowerservicesinc.com` and which
+already carries `info@usts1.com`. Adding `info@ustelecomservices.com` to it takes
+one line, but it has to be done in Exchange — Graph refuses to edit distribution
+lists, and the ops app has no Exchange rights by design.
+
+In the Exchange admin center: **Recipients → Groups → Info → Email addresses →
+Add** `info@ustelecomservices.com`.
+
+Or from PowerShell:
+
+```powershell
+Connect-ExchangeOnline -UserPrincipalName joshw@usts1.com
+Set-DistributionGroup -Identity 'info@ustowerservicesinc.com' `
+  -EmailAddresses @{Add='info@ustelecomservices.com'}
+```
+
+Once that exists, the website's contact address can move to it — that is a
+one-line change in `src/content/site.ts`.
