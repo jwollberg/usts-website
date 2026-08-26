@@ -9,7 +9,7 @@
       ]
     },
     {
-      "route": "/subcontractors",
+      "route": "/subcontractors*",
       "redirect": "/contractors",
       "statusCode": 301
     },
@@ -33,7 +33,8 @@
     "rewrite": "/404.html",
     "exclude": [
       "/api/*",
-      "/*.{png,jpg,jpeg,gif,svg,webp,avif,ico,css,js,xml,txt,woff,woff2}"
+      "/*.{png,jpg,jpeg,gif,svg,webp,avif,ico,css,js,xml,txt,woff,woff2}",
+      "/subcontractors*"
     ]
   },
   "responseOverrides": {
