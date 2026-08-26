@@ -161,8 +161,12 @@ found the careers list silently broken in production.
 ## Still to do
 
 - Move DNS so `www.usts1.com` points here — see `docs/dns-change-request.md`.
-- Josh to sign off on the wording, especially "120+ years combined experience"
-  and the "100% Satisfaction on Your First Job, or it's Free" guarantee.
+- Josh to sign off on the wording generally.
+
+> Two claims from the old Wix site were **deliberately left off**: "120+ years of
+> combined experience" and the "100% Satisfaction on Your First Job, or it's
+> Free" guarantee. Josh removed them. Don't reinstate either without asking —
+> a guarantee in particular is a commitment, not a tagline.
 - Real photography.
 - **The Power Pages portal (`ustsportal.powerappsportals.com`) can now be switched
   off.** Both of its forms — careers and contractor onboarding — live here and

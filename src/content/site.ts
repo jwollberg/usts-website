@@ -91,11 +91,13 @@ export const executives = [
   { name: 'Joshua Wollberg', title: 'Director of Operations Support' },
 ] as const;
 
-/** Headline proof points. Each one is defensible from company history. */
+/**
+ * Headline proof points. Every one of these must be defensible — anything we
+ * cannot stand behind does not belong on a client-facing page.
+ */
 export const stats = [
   { value: `${site.founded}`, label: 'Founded', detail: 'Building wireless infrastructure since day one' },
   { value: `${yearsInBusiness}+`, label: 'Years in the field', detail: 'Analog through 5G, coast to coast' },
-  { value: '120+', label: 'Combined years of expertise', detail: 'Across our engineering and technical leadership' },
   { value: '3', label: 'Operating markets', detail: 'California, Arizona and Utah' },
 ] as const;
 

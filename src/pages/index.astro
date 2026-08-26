@@ -59,14 +59,13 @@ import { site, services, stats, offices, yearsInBusiness } from '../content/site
   {/* ---------------------------------------------------------------- Stats */}
   <section class="border-b" style="border-color: var(--line)">
     <div class="mx-auto max-w-7xl px-5 sm:px-8">
-      <dl class="grid grid-cols-2 lg:grid-cols-4">
+      <dl class="grid grid-cols-1 sm:grid-cols-3">
         {
           stats.map((s, i) => (
             <div
               class:list={[
-                'flex flex-col border-b px-1 py-10 sm:px-6 lg:border-b-0',
-                i % 2 === 1 && 'border-l pl-6 sm:pl-8',
-                i > 0 && 'lg:border-l lg:pl-8',
+                'flex flex-col border-b px-1 py-10 sm:border-b-0 sm:px-6',
+                i > 0 && 'sm:border-l sm:pl-8',
               ]}
               style="border-color: var(--line)"
             >
