@@ -22,6 +22,24 @@ git push
 GitHub Actions rebuilds and deploys (about two minutes). Open a pull request and
 you get a temporary preview link on the PR to look at before merging.
 
+### If a push doesn't publish
+
+There is a one-command fallback that builds and deploys straight from your
+machine, skipping GitHub entirely:
+
+```bash
+pnpm deploy
+```
+
+It needs `az login` with access to the USTS subscription and reads the
+deployment token from Azure at run time — nothing is stored in the repo.
+
+> This was needed on 2026-08-26: GitHub stopped dispatching Actions runs for this
+> account (a run wedged in "queued" that could not be cancelled or deleted, then
+> no runs created at all). The repo was made public, which makes Actions free, but
+> the block did not lift the same day. If pushes still aren't publishing, use
+> `pnpm deploy` and check the Actions tab.
+
 | | |
 |---|---|
 | Live (once DNS moves) | https://www.usts1.com |
