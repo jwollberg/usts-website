@@ -57,45 +57,38 @@ Both `TXT` records are in place and have verified. Nothing further needed here.
 | `TXT` | `_dnsauth.www` | `_zutruum3gzhyupyp25vdggzz2re3qjh` | live |
 | `TXT` | `@` | `MS=ms20047663` | **verified — email domain is active** |
 
-## Stage 2 — point the website here
+## Stage 2 — the website ✅ LIVE
 
-### First: turn off Domain Forwarding on this domain
+`https://www.ustelecomservices.com` is serving the new site with a valid
+certificate. Nothing further needed for `www`.
 
-**GoDaddy will not let you add or edit the `www` record while forwarding is
-switched on.** Forwarding creates and locks these three things, which is why
-their edit and delete buttons are greyed out:
-
-- the two `A` records on `@` (`15.197.142.173` and `3.33.152.147`)
-- the `CNAME` on `www` pointing at `ustelecomservices.com`
-
-Go to **Domain Settings → Forwarding**, and delete the existing forward (the one
-sending this domain to `usts1.com`). That releases all three records.
-
-> Leave the `pay` and `_domainconnect` CNAMEs alone — those are GoDaddy's own
-> system records and are unrelated.
-
-### Then add these two records
-
-| Type | Name / Host | Value | TTL |
+| Type | Name / Host | Value | Status |
 |---|---|---|---|
-| `CNAME` | `www` | `ambitious-tree-058d7ee10.7.azurestaticapps.net` | 600 |
-| `TXT` | `_dnsauth` | `_9ms45nu9xtbnrju09dtosantpewje06` | default |
+| `CNAME` | `www` | `ambitious-tree-058d7ee10.7.azurestaticapps.net` | **live** |
 
-The `CNAME` puts the website live. The `TXT` proves ownership for the bare
-domain (no `www`), which is a separate check from the one already done.
+## Stage 2b — the bare domain (one record left)
 
-### Finally, the bare domain
+`ustelecomservices.com` without the `www` still shows a GoDaddy parked page.
 
-Once that `_dnsauth` record is in, tell us — Microsoft then issues an IP address
-for the bare domain and we'll pass it to you. Add it as:
+**Move the ownership record from `_dnsauth.www` to `@`.** Azure looks for the
+bare domain's proof at the root, not under `www`:
 
-| Type | Name / Host | Value | TTL |
+| Action | Type | Name / Host | Value |
 |---|---|---|---|
-| `A` | `@` | *(the IP we send you)* | 600 |
+| **Add** | `TXT` | `@` | `_9ms45nu9xtbnrju09dtosantpewje06` |
+| **Then delete** | `TXT` | `_dnsauth.www` | *(same value — no longer needed)* |
+
+Add the new one first, confirm with us, then delete the old one. Several `TXT`
+records on `@` side by side is normal.
+
+Once that validates we send you an IP address, and you replace the parked record:
+
+| Action | Type | Name / Host | Value | TTL |
+|---|---|---|---|---|
+| **Edit** | `A` | `@` | *(the IP we send — replaces "Parked")* | 600 |
 
 **Do not re-enable Domain Forwarding on this domain.** It would take the `www`
-record back over and the site would go down. Both the bare domain and the `www`
-address will serve the site directly, each with its own certificate.
+record back over and the site would go down.
 
 ## Stage 3 — email for this domain
 
