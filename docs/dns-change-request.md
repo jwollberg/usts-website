@@ -48,48 +48,59 @@ in the name is also email or device management. Leave those alone too.
 This domain has no email and no records of its own today, so there is nothing
 here to break.
 
-## Stage 1 — verification records (safe, nothing visible changes)
+## Stage 1 — verification records ✅ DONE
 
-Add these two `TXT` records. They prove we own the domain — one for the website
-certificate, one for email. **Nothing about any live site changes at this stage.**
+Both `TXT` records are in place and have verified. Nothing further needed here.
 
-| Type | Name / Host | Value | TTL |
+| Type | Name / Host | Value | Status |
 |---|---|---|---|
-| `TXT` | `_dnsauth.www` | `_zutruum3gzhyupyp25vdggzz2re3qjh` | default |
-| `TXT` | `@` | `MS=ms20047663` | default |
-
-> Enter `_dnsauth.www` exactly as written, leading underscore included — GoDaddy
-> adds `ustelecomservices.com` for you.
-
-Then tell us. We confirm both verifications have gone through before Stage 2.
+| `TXT` | `_dnsauth.www` | `_zutruum3gzhyupyp25vdggzz2re3qjh` | live |
+| `TXT` | `@` | `MS=ms20047663` | **verified — email domain is active** |
 
 ## Stage 2 — point the website here
 
-**Change the `www` record.** It is currently a `CNAME` to `ustelecomservices.com`.
+### First: turn off Domain Forwarding on this domain
 
-| Type | Name / Host | Points to | TTL |
+**GoDaddy will not let you add or edit the `www` record while forwarding is
+switched on.** Forwarding creates and locks these three things, which is why
+their edit and delete buttons are greyed out:
+
+- the two `A` records on `@` (`15.197.142.173` and `3.33.152.147`)
+- the `CNAME` on `www` pointing at `ustelecomservices.com`
+
+Go to **Domain Settings → Forwarding**, and delete the existing forward (the one
+sending this domain to `usts1.com`). That releases all three records.
+
+> Leave the `pay` and `_domainconnect` CNAMEs alone — those are GoDaddy's own
+> system records and are unrelated.
+
+### Then add these two records
+
+| Type | Name / Host | Value | TTL |
 |---|---|---|---|
 | `CNAME` | `www` | `ambitious-tree-058d7ee10.7.azurestaticapps.net` | 600 |
+| `TXT` | `_dnsauth` | `_9ms45nu9xtbnrju09dtosantpewje06` | default |
 
-Edit the existing `www` record rather than adding a second one. TTL can go back
-to default once everything is confirmed working.
+The `CNAME` puts the website live. The `TXT` proves ownership for the bare
+domain (no `www`), which is a separate check from the one already done.
 
-**Change the domain forwarding.** This domain currently forwards to
-`http://usts1.com`. Repoint that forward to:
+### Finally, the bare domain
 
-```
-https://www.ustelecomservices.com
-```
+Once that `_dnsauth` record is in, tell us — Microsoft then issues an IP address
+for the bare domain and we'll pass it to you. Add it as:
 
-Permanent (301), root domain only.
+| Type | Name / Host | Value | TTL |
+|---|---|---|---|
+| `A` | `@` | *(the IP we send you)* | 600 |
 
-> The `A` records at the root (`3.33.152.147`, `15.197.142.173`) belong to
-> GoDaddy's forwarding service. Don't edit them by hand — changing the forwarding
-> setting updates them.
+**Do not re-enable Domain Forwarding on this domain.** It would take the `www`
+record back over and the site would go down. Both the bare domain and the `www`
+address will serve the site directly, each with its own certificate.
 
 ## Stage 3 — email for this domain
 
-Add these **after** we confirm the `MS=ms20047663` record has verified.
+The domain is already verified and switched on for email in Microsoft 365. Add
+these three records and mailboxes can start using it.
 
 | Type | Name / Host | Value | Priority | TTL |
 |---|---|---|---|---|
@@ -97,22 +108,22 @@ Add these **after** we confirm the `MS=ms20047663` record has verified.
 | `TXT` | `@` | `v=spf1 include:spf.protection.outlook.com -all` | — | default |
 | `CNAME` | `autodiscover` | `autodiscover.outlook.com` | — | default |
 
+> Keep the existing `TXT @ MS=ms20047663` record. Adding a second `TXT` on `@` is
+> fine and expected — a domain can hold several.
+
 ### ⚠️ Two records Microsoft will suggest that you must NOT add
 
-If you follow Microsoft's own setup wizard it will offer a longer list. **Skip
-these two:**
+If you follow Microsoft's own setup wizard it offers a longer list. **Skip these:**
 
 1. **`CNAME` at `@` pointing to `usts1.sharepoint.com`.** A `CNAME` at the root of
-   a domain is invalid alongside any other record and **would take the website
-   and the email down at the same time**. It is for a retired SharePoint feature
-   and is not needed.
+   a domain is invalid alongside any other record and **would take the website and
+   the email down together**. It is for a retired SharePoint feature.
 2. **`MX` at `@` pointing to `ms20047663.msv1.invalid`.** That is an alternative
-   way of proving ownership. The `TXT` record above already does that, and this
-   one would break mail delivery.
+   ownership check. The `TXT` already did that, and this would break mail delivery.
 
 The Skype/Teams records (`sip`, `lyncdiscover`, `_sip._tls`,
-`_sipfederationtls._tcp`) are only needed if this domain is used for Teams calling.
-Skip them unless we ask.
+`_sipfederationtls._tcp`) are only needed for Teams calling on this domain. Skip
+them unless we ask.
 
 ---
 
@@ -159,13 +170,15 @@ are.
 
 ## Suggested order
 
-1. **Stage 1** on ustelecomservices.com — the two `TXT` records. Nothing visible
-   changes; the current site keeps serving.
-2. We confirm both verified, and that the certificate has been issued.
-3. **Stage 2** — the `www` `CNAME` and the forwarding. The new site goes live.
-4. **Stage 3** — the email records for ustelecomservices.com.
-5. **Domains 2 and 3** — repoint the two old domains once the new site is
-   confirmed good.
+1. ~~**Stage 1** — the two `TXT` records on ustelecomservices.com.~~ **Done and
+   verified.** The email domain is already active in Microsoft 365.
+2. **Stage 2** — turn off Forwarding on ustelecomservices.com, then add the `www`
+   `CNAME` and the `_dnsauth` `TXT`. **This is the step that puts the new site
+   live.**
+3. Tell us; we send you the IP for the bare domain, you add the `A` record.
+4. **Stage 3** — the three email records for ustelecomservices.com.
+5. **Domains 2 and 3** — repoint the two old domains, once the new site is
+   confirmed good. Domain 3 is what actually retires the Wix site.
 
 ## Backing it out
 
