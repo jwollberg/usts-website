@@ -57,10 +57,33 @@ Write-Host '--- least privilege: these MUST be denied ---'
 Expect-Denied 'read timecards'  { Invoke-RestMethod -Headers $h "$api/cr24f_timecards?`$top=1" }
 Expect-Denied 'read employees'  { Invoke-RestMethod -Headers $h "$api/systemusers?`$top=1" }
 Expect-Denied 'read job orders' { Invoke-RestMethod -Headers $h "$api/cr24f_joborders?`$top=1" }
-Expect-Denied 'read HR policy'  { Invoke-RestMethod -Headers $h "$api/cr24f_policieses?`$top=1" }
+Expect-Denied 'read HR policy'  { Invoke-RestMethod -Headers $h "$api/cr24f_policies?`$top=1" }
 
 Write-Host ''
-Write-Host '--- create + file upload ---'
+Write-Host '--- contractor onboarding (row + attachment in one insert) ---'
+$b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes('verification document'))
+$cRec = [ordered]@{
+  cr24f_companyname = 'ZZ VERIFY DELETE ME'; cr24f_submittername = 'ZZ Verify'
+  cr24f_email = 'zz.verify@example.invalid'; cr24f_phone = '(555) 555-0101'
+  cr24f_sponsor = 'verification'
+  cr24f_contractoronboardingrequest_Annotations = @(
+    [ordered]@{ subject = 'Quote - ZZ VERIFY'; notetext = 'verification'; filename = 'zz.txt'
+                mimetype = 'text/plain'; documentbody = $b64 }
+  )
+}
+$cResp = Try-It 'create contractor request + document' {
+  Invoke-WebRequest -UseBasicParsing -Method POST -Headers $hw "$api/cr24f_contractoronboardingrequests" -Body ($cRec | ConvertTo-Json -Depth 6)
+}
+if ($cResp) {
+  $cid = ($cResp.Headers['OData-EntityId'] -join '') -replace '.*\(([0-9a-fA-F-]{36})\).*','$1'
+  $adm0 = & "C:\Projects\USTS\scripts\token.ps1" -Resource $envUrl
+  $ah0 = @{ Authorization = "Bearer $adm0" }
+  try { Invoke-RestMethod -Method DELETE -Headers $ah0 "$api/cr24f_contractoronboardingrequests($cid)" | Out-Null } catch { }
+  Write-Host "      cleaned $cid"
+}
+
+Write-Host ''
+Write-Host '--- job application (row + resume) ---'
 $rec = @{
   cr24f_fullname = 'ZZ TEST DELETE ME'
   cr24f_firstname = 'ZZ'; cr24f_lastname = 'TEST DELETE ME'
