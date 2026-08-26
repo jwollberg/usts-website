@@ -34,11 +34,11 @@ pnpm deploy
 It needs `az login` with access to the USTS subscription and reads the
 deployment token from Azure at run time — nothing is stored in the repo.
 
-> This was needed on 2026-08-26: GitHub stopped dispatching Actions runs for this
-> account (a run wedged in "queued" that could not be cancelled or deleted, then
-> no runs created at all). The repo was made public, which makes Actions free, but
-> the block did not lift the same day. If pushes still aren't publishing, use
-> `pnpm deploy` and check the Actions tab.
+> **Don't `pnpm deploy` while Actions is behind.** If CI is queued or backlogged,
+> it will eventually run those older commits and overwrite whatever you deployed
+> by hand — with older content. That happened on 2026-08-26: a manual deploy was
+> silently reverted when the queue drained. Either wait for CI, or push a commit
+> afterwards so the last thing CI runs is the newest code.
 
 | | |
 |---|---|
