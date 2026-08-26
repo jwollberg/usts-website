@@ -7,6 +7,8 @@ name: Deploy to Azure Static Web Apps
 on:
   push:
     branches: [main]
+  # Lets a deploy be re-run by hand from the Actions tab without a code change.
+  workflow_dispatch:
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches: [main]

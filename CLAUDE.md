@@ -31,10 +31,10 @@ you get a temporary preview link on the PR to look at before merging.
 ## What's where
 
 ```
-src/content/site.ts      EVERY company fact — phone, email, offices, services,
+src/content/site.ts      EVERY company fact — email, offices, services,
                          team, the employee app links. Edit here, not in pages.
 src/pages/               One file per page of the site.
-src/components/          Header, footer, and the two forms.
+src/components/          Header, footer, and the three forms.
 src/styles/global.css    Colors, fonts, buttons. All colors are defined once at
                          the top of this file.
 public/                  Logo, icons, share image.
@@ -42,7 +42,7 @@ api/                     The small bit of server code (see below).
 ```
 
 **To change wording on a page**, open the matching file in `src/pages/`.
-**To change a phone number, address, service, or team member**, open
+**To change the email address, an office, a service, or a team member**, open
 `src/content/site.ts` — it feeds every page at once.
 
 ## Brand
@@ -55,9 +55,9 @@ means the real logo is always readable. Don't make the header dark.
 
 Tagline: **"Keeping People Connected."** Founded 2002.
 
-## The three things the site does that aren't just pages
+## The four things the site does that aren’t just pages
 
-All three run in `api/` as small serverless functions:
+All four run in `api/` as small serverless functions:
 
 | What | Where it goes |
 |---|---|
