@@ -1,0 +1,149 @@
+---
+import { nav } from '../content/site';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => path === href || path.startsWith(href + '/');
+
+const links = [...nav, { label: 'Employees', href: '/employees' }];
+---
+
+<header class="site-header sticky top-0 z-50 border-b backdrop-blur-md">
+  <div class="mx-auto flex h-18 max-w-7xl items-center gap-6 px-5 sm:px-8">
+    <a href="/" class="flex-none py-3" aria-label="US Telecom Services — home">
+      <img src="/logo.svg" alt="US Telecom Services" width="220" height="54" class="h-9 w-auto" />
+    </a>
+
+    <nav class="ml-auto hidden items-center gap-0.5 lg:flex" aria-label="Primary">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+            class="nav-link relative rounded-sm px-3.5 py-2 font-display text-[0.9375rem] font-medium"
+            data-active={isActive(item.href) ? 'true' : undefined}
+          >
+            {item.label}
+            {isActive(item.href) && <span class="nav-underline absolute inset-x-3.5 -bottom-px h-0.5" />}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="ml-auto flex items-center gap-4 lg:ml-0">
+      <a
+        href="/employees"
+        aria-current={isActive('/employees') ? 'page' : undefined}
+        data-active={isActive('/employees') ? 'true' : undefined}
+        class="nav-link hidden font-display text-[0.9375rem] font-medium sm:inline"
+      >
+        Employees
+      </a>
+      <a href="/contact" class="btn btn-primary hidden sm:inline-flex">Request a quote</a>
+
+      <button
+        type="button"
+        id="menu-toggle"
+        class="-mr-1.5 inline-flex h-10 w-10 items-center justify-center rounded-sm lg:hidden"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Open menu"
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="square"
+          aria-hidden="true"
+        >
+          <path d="M3 6h18M3 12h18M3 18h18" data-icon-open></path>
+          <path d="M5 5l14 14M19 5L5 19" class="hidden" data-icon-close></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-menu" class="mobile-menu hidden border-t lg:hidden">
+    <nav class="mx-auto max-w-7xl px-5 py-4 sm:px-8" aria-label="Mobile">
+      <ul class="flex flex-col">
+        {
+          links.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={isActive(item.href) ? 'page' : undefined}
+                data-active={isActive(item.href) ? 'true' : undefined}
+                class="mobile-link block border-b py-3.5 font-display text-lg font-semibold"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a href="/contact" class="btn btn-primary mt-5 w-full">Request a quote</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const iconOpen = document.querySelector('[data-icon-open]');
+  const iconClose = document.querySelector('[data-icon-close]');
+
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    toggle.setAttribute('aria-label', open ? 'Open menu' : 'Close menu');
+    menu?.classList.toggle('hidden', open);
+    iconOpen?.classList.toggle('hidden', !open);
+    iconClose?.classList.toggle('hidden', open);
+  });
+</script>
+
+<style>
+  /* Every colour here comes from the --header-* tokens, which stay cream in
+     both themes. Nothing in this block may reference --surface/--text-*, or the
+     bar would invert and the logo would be unreadable again. */
+  .site-header {
+    background: color-mix(in srgb, var(--header-bg) 92%, transparent);
+    border-color: var(--header-line);
+  }
+  .mobile-menu {
+    background: var(--header-bg);
+    border-color: var(--header-line);
+  }
+  #menu-toggle {
+    color: var(--header-text-strong);
+  }
+  .nav-link {
+    color: var(--header-text);
+    transition: color 0.18s;
+  }
+  .nav-link:hover,
+  .nav-link[data-active] {
+    color: var(--header-text-strong);
+  }
+  .nav-underline {
+    background: var(--color-flag-500);
+  }
+  .mobile-link {
+    border-color: var(--header-line);
+    color: var(--header-text-strong);
+  }
+  .mobile-link[data-active] {
+    color: var(--color-flag-500);
+  }
+  /* The CTA sits on cream in both themes, so it keeps the true brand red
+     rather than the lightened dark-mode accent. */
+  .site-header .btn-primary {
+    background: var(--color-flag-500);
+    color: #fff;
+  }
+  .site-header .btn-primary:hover {
+    background: var(--color-flag-600);
+  }
+</style>

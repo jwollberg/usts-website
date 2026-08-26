@@ -1,0 +1,85 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { executives, site } from '../content/site';
+
+/** Two-letter monogram stands in until we have cleared headshots. */
+const initials = (name: string) =>
+  name
+    .split(' ')
+    .map((p) => p[0])
+    .join('')
+    .slice(0, 2);
+---
+
+<Base
+  title="Team"
+  description="The executive team behind US Telecom Services — owners and operators who have been in wireless infrastructure for decades."
+>
+  <PageHeader
+    eyebrow="Our team"
+    title="The people accountable for the work."
+    lead="A small executive team, all of them long enough in this industry to know what a job actually takes."
+  />
+
+  <section class="py-20 sm:py-28">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <ul class="grid gap-px sm:grid-cols-2 lg:grid-cols-4" style="background: var(--line)">
+        {
+          executives.map((p) => (
+            <li class="p-8 sm:p-10" style="background: var(--surface)">
+              <div
+                class="flex h-20 w-20 items-center justify-center rounded-full border-2 font-display text-2xl font-bold"
+                style="border-color: var(--brand); color: var(--brand)"
+                aria-hidden="true"
+              >
+                {initials(p.name)}
+              </div>
+              <h2 class="mt-6 font-display text-xl">{p.name}</h2>
+              <p class="mt-1.5 text-[0.9375rem]" style="color: var(--text-muted)">
+                {p.title}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="mt-20 grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
+        <div>
+          <p class="eyebrow">Beyond the office</p>
+          <h2 class="mt-5 text-4xl sm:text-5xl">The crews are the company.</h2>
+        </div>
+        <div class="prose-usts max-w-2xl text-lg" style="color: var(--text-body)">
+          <p>
+            Behind the names above are the tower technicians, crew leaders, electricians, fiber techs,
+            warehouse staff, project managers and safety trainers who actually put steel in the air and keep
+            it there.
+          </p>
+          <p>
+            Between our engineering and technical leadership we carry more than <strong>120 years of
+            combined experience</strong> — from planning and design through installation, testing and
+            analysis.
+          </p>
+          <p>
+            If that sounds like work you want to do, <a href="/careers" class="team-link">we are hiring</a>.
+          </p>
+        </div>
+      </div>
+
+      <p class="mt-16 text-sm" style="color: var(--text-muted)">
+        Media or partnership inquiries: <a href={`mailto:${site.email}`} class="team-link">{site.email}</a>
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .team-link {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .team-link:hover {
+    color: var(--accent-hover);
+  }
+</style>

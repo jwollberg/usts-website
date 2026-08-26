@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /employees
+
+Sitemap: https://www.usts1.com/sitemap-index.xml

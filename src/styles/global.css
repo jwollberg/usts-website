@@ -1,0 +1,473 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Brand tokens.
+
+   The three colours below are sampled from the real logo file, not
+   invented: the mark is literally the US flag palette. Navy carries the
+   brand, red is an accent only (CTAs, rules, the ring in the mark), and
+   charcoal is the wordmark and body text. Resist adding a fourth hue.
+   ------------------------------------------------------------------ */
+@theme {
+  --color-navy-50: #f3f3f8;
+  --color-navy-100: #e4e4ef;
+  --color-navy-200: #c6c5dd;
+  --color-navy-300: #a09fc3;
+  --color-navy-400: #6f6ea1;
+  --color-navy-500: #3c3b6e; /* Old Glory Blue - brand */
+  --color-navy-600: #33325d;
+  --color-navy-700: #29284b;
+  --color-navy-800: #1d1c36;
+  --color-navy-900: #131226;
+  --color-navy-950: #0a0a16;
+
+  --color-flag-50: #fdf3f4;
+  --color-flag-100: #fae4e7;
+  --color-flag-200: #f3c3ca;
+  --color-flag-300: #e6929e;
+  --color-flag-400: #d25b6c;
+  --color-flag-500: #b22234; /* Old Glory Red - accent */
+  --color-flag-600: #971d2c;
+  --color-flag-700: #7b1723;
+  --color-flag-800: #5d111a;
+  --color-flag-900: #3e0b12;
+
+  --color-ink-500: #383838; /* wordmark charcoal */
+
+  --color-cream-50: #fbf8f2;
+  --color-cream-100: #f6f1e7;
+  --color-cream-200: #efe9dc;
+  --color-cream-300: #d9cfb8;
+
+  --font-display: "Archivo", "Segoe UI", system-ui, sans-serif;
+  --font-sans: "Inter", "Segoe UI", system-ui, sans-serif;
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ------------------------------------------------------------------
+   Semantic surface tokens. Every component reads these, never a raw
+   palette step, so dark mode is one block of overrides rather than a
+   second design.
+   ------------------------------------------------------------------ */
+:root {
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-sunken: var(--color-navy-50);
+  --surface-invert: var(--color-navy-900);
+
+  --text-strong: var(--color-navy-900);
+  --text-body: #45454f;
+  --text-muted: #6b6b78;
+  --text-on-invert: #ffffff;
+  --text-on-invert-muted: #b9b8cd;
+
+  --line: #e2e2ea;
+  --line-strong: #cfcfdb;
+
+  --accent: var(--color-flag-500);
+  --accent-hover: var(--color-flag-600);
+  --brand: var(--color-navy-500);
+
+  --shadow-card: 0 1px 2px rgb(19 18 38 / 0.04), 0 8px 24px -12px rgb(19 18 38 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(19 18 38 / 0.06), 0 18px 40px -16px rgb(19 18 38 / 0.22);
+
+  /* The masthead is cream in BOTH themes and never inverts. That is deliberate:
+     the logo's red ring is close to invisible on a dark ground, so keeping the
+     bar light means the full-colour mark is always legible instead of needing a
+     washed-out inverse. It also separates the header from the white body in
+     light mode and from the navy hero in dark. */
+  --header-bg: var(--color-cream-100);
+  --header-line: #ddd4c0;
+  --header-text: #6a6459;
+  --header-text-strong: var(--color-navy-800);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface: #0f0e1c;
+    --surface-raised: #17162a;
+    --surface-sunken: #0a0a16;
+    --surface-invert: #17162a;
+
+    --text-strong: #f4f4f8;
+    --text-body: #c3c2d4;
+    --text-muted: #8f8ea6;
+    --text-on-invert: #ffffff;
+    --text-on-invert-muted: #b9b8cd;
+
+    --line: #272640;
+    --line-strong: #35334f;
+
+    --accent: #d2586a;
+    --accent-hover: #e07887;
+    --brand: #8886c4;
+
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.5), 0 18px 40px -16px rgb(0 0 0 / 0.7);
+
+    --header-bg: var(--color-cream-200);
+    --header-line: #cbc0a8;
+    --header-text: #5f5a50;
+    --header-text-strong: var(--color-navy-800);
+  }
+}
+
+:root[data-theme="dark"] {
+  --surface: #0f0e1c;
+  --surface-raised: #17162a;
+  --surface-sunken: #0a0a16;
+  --surface-invert: #17162a;
+
+  --text-strong: #f4f4f8;
+  --text-body: #c3c2d4;
+  --text-muted: #8f8ea6;
+  --text-on-invert: #ffffff;
+  --text-on-invert-muted: #b9b8cd;
+
+  --line: #272640;
+  --line-strong: #35334f;
+
+  --accent: #d2586a;
+  --accent-hover: #e07887;
+  --brand: #8886c4;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.5), 0 18px 40px -16px rgb(0 0 0 / 0.7);
+
+  --header-bg: var(--color-cream-200);
+  --header-line: #cbc0a8;
+  --header-text: #5f5a50;
+  --header-text-strong: var(--color-navy-800);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background-color: var(--surface);
+    color: var(--text-body);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    color: var(--text-strong);
+    font-weight: 700;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* The masthead is sticky, so anything scrolled to via an anchor or focused
+     programmatically must keep clear of it or it lands underneath the bar. */
+  :where(h1, h2, h3, [id], :target) {
+    scroll-margin-top: 6rem;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--color-navy-500);
+    color: #fff;
+  }
+}
+
+@layer components {
+  /* Eyebrow label above a section heading. The red rule is the only place
+     the accent appears in body content. */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 1.75rem;
+    height: 2px;
+    background: var(--accent);
+    flex: none;
+  }
+  .eyebrow-invert {
+    color: var(--text-on-invert-muted);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    letter-spacing: 0.01em;
+    padding: 0.8125rem 1.5rem;
+    border-radius: 2px;
+    transition: background-color 0.18s, color 0.18s, border-color 0.18s, transform 0.18s var(--ease-out-quint);
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: var(--accent-hover);
+  }
+
+  .btn-secondary {
+    background: var(--color-navy-500);
+    color: #fff;
+  }
+  .btn-secondary:hover {
+    background: var(--color-navy-600);
+  }
+
+  .btn-outline {
+    border-color: var(--line-strong);
+    color: var(--text-strong);
+    background: transparent;
+  }
+  .btn-outline:hover {
+    border-color: var(--text-strong);
+  }
+
+  .btn-ghost-invert {
+    border-color: rgb(255 255 255 / 0.35);
+    color: #fff;
+    background: transparent;
+  }
+  .btn-ghost-invert:hover {
+    background: rgb(255 255 255 / 0.1);
+    border-color: rgb(255 255 255 / 0.6);
+  }
+
+  .card {
+    background: var(--surface-raised);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Two logo files rather than one: the mark's navy is unreadable on a dark
+     surface, and the wordmark can't be recoloured with currentColor without
+     dragging the mark's navy along with it. Swapped on the same conditions as
+     the colour tokens above so there is only ever one dark-mode mechanism. */
+  .logo-dark {
+    display: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) .logo-light {
+      display: none;
+    }
+    :root:not([data-theme='light']) .logo-dark {
+      display: block;
+    }
+  }
+  :root[data-theme='dark'] .logo-light {
+    display: none;
+  }
+  :root[data-theme='dark'] .logo-dark {
+    display: block;
+  }
+
+  /* ---------------------------------------------------------- form controls */
+  .usts-input {
+    display: block;
+    width: 100%;
+    background: var(--surface-raised);
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    padding: 0.6875rem 0.875rem;
+    font-size: 1rem;
+    color: var(--text-strong);
+    transition: border-color 0.16s, box-shadow 0.16s;
+  }
+  .usts-input::placeholder {
+    color: var(--text-muted);
+  }
+  .usts-input:hover {
+    border-color: var(--text-muted);
+  }
+  .usts-input:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 22%, transparent);
+  }
+  .usts-input[data-invalid] {
+    border-color: var(--accent);
+  }
+  .usts-input[data-invalid]:focus {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+
+  .usts-select {
+    appearance: none;
+    padding-right: 2.5rem;
+    background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+      linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position: calc(100% - 1.15rem) 1.2rem, calc(100% - 0.85rem) 1.2rem;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+  }
+
+  /* Radio/checkbox rendered as a pill. The real control stays in the DOM and
+     focusable — only its painting is replaced. */
+  .usts-choice {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    padding: 0.5625rem 1rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text-body);
+    background: var(--surface-raised);
+    transition: border-color 0.16s, color 0.16s, background-color 0.16s;
+  }
+  .usts-choice:hover {
+    border-color: var(--text-muted);
+  }
+  .usts-choice[data-checked] {
+    border-color: var(--brand);
+    background: color-mix(in srgb, var(--brand) 9%, var(--surface-raised));
+    color: var(--text-strong);
+    font-weight: 600;
+  }
+  .usts-choice:has(input:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .usts-checkbox {
+    appearance: none;
+    width: 1.15rem;
+    height: 1.15rem;
+    flex: none;
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    background: var(--surface-raised);
+    cursor: pointer;
+    transition: background-color 0.16s, border-color 0.16s;
+  }
+  .usts-checkbox:checked {
+    background: var(--brand);
+    border-color: var(--brand);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3.5 8.5 6.5 11.5 12.5 5' stroke='white' stroke-width='2' stroke-linecap='square'/%3E%3C/svg%3E");
+    background-size: 100%;
+  }
+
+  .usts-file {
+    display: block;
+    width: 100%;
+    font-size: 0.9375rem;
+    color: var(--text-body);
+  }
+  .usts-file::file-selector-button {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-right: 0.875rem;
+    padding: 0.5625rem 1rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    background: var(--surface-raised);
+    color: var(--text-strong);
+    cursor: pointer;
+  }
+  .usts-file::file-selector-button:hover {
+    border-color: var(--text-strong);
+  }
+
+  .usts-step {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    padding: 0.4375rem 0.75rem;
+    border-radius: 2px;
+    color: var(--text-muted);
+    transition: color 0.16s, background-color 0.16s;
+  }
+  .usts-step:not(:disabled) {
+    cursor: pointer;
+  }
+  .usts-step[data-state='current'] {
+    color: var(--text-strong);
+    background: var(--surface-sunken);
+  }
+  .usts-step[data-state='done'] {
+    color: var(--accent);
+  }
+  .usts-step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.375rem;
+    height: 1.375rem;
+    border-radius: 999px;
+    border: 1px solid currentColor;
+    font-size: 0.6875rem;
+    line-height: 1;
+  }
+
+  .prose-usts p {
+    margin-block: 1.125em;
+    line-height: 1.75;
+  }
+  .prose-usts p:first-child { margin-block-start: 0; }
+  .prose-usts p:last-child { margin-block-end: 0; }
+  .prose-usts strong { color: var(--text-strong); font-weight: 600; }
+}
+
+@layer utilities {
+  /* The mark's triangle, reused as a section motif. */
+  .edge-notch {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2.5rem), 50% 100%, 0 calc(100% - 2.5rem));
+  }
+
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+    background-size: 88px 88px;
+  }
+}

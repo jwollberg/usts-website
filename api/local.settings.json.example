@@ -1,0 +1,13 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureWebJobsStorage": "",
+    "TENANT_ID": "08b93273-d51f-41e4-8e81-c3f54457442c",
+    "DV_URL": "https://ustelecomservices.crm.dynamics.com",
+    "DV_CLIENT_ID": "<app id of USTS-Web-Public>",
+    "DV_CLIENT_SECRET": "<client secret - never commit>",
+    "BRANDED_EMAIL_FLOW_URL": "<Request trigger URL of Nexus - Send Branded Email>",
+    "CONTACT_TO": "info@usts1.com"
+  }
+}

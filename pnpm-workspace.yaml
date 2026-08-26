@@ -1,0 +1,8 @@
+# pnpm 11 blocks postinstall scripts by default. esbuild (via Vite) and sharp
+# both need theirs to link the correct platform binary.
+allowBuilds:
+  esbuild: true
+  sharp: true
+onlyBuiltDependencies:
+  - esbuild
+  - sharp

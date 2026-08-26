@@ -1,0 +1,103 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ContactForm from '../components/ContactForm';
+import { site, offices } from '../content/site';
+---
+
+<Base
+  title="Contact"
+  description="Request a quote, verify employment, or ask us anything. Offices in California, Arizona and Utah."
+  hideCta={true}
+>
+  <PageHeader
+    eyebrow="Contact"
+    title="Tell us what you’re working on."
+    lead="Quotes, scopes, employment verification, or a straight question — send it over and a real person will come back to you."
+  />
+
+  <section class="py-16 sm:py-24">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <div class="grid gap-14 lg:grid-cols-[1.3fr_1fr] lg:gap-20">
+        <div>
+          <ContactForm client:load />
+        </div>
+
+        <aside class="space-y-10">
+          <div>
+            <h2 class="font-display text-xs font-semibold tracking-[0.14em] uppercase" style="color: var(--text-strong)">
+              Reach us directly
+            </h2>
+            <ul class="mt-5 space-y-3">
+              <li>
+                <a href={`mailto:${site.email}`} class="contact-link font-display text-lg font-semibold">
+                  {site.email}
+                </a>
+              </li>
+              <li>
+                <a href={`tel:${site.phoneHref}`} class="contact-link font-display text-lg font-semibold">
+                  {site.phone}
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h2 class="font-display text-xs font-semibold tracking-[0.14em] uppercase" style="color: var(--text-strong)">
+              Offices
+            </h2>
+            <ul class="mt-5 space-y-5">
+              {
+                offices.map((o) => (
+                  <li class="border-l-2 pl-4" style="border-color: var(--line-strong)">
+                    <p class="font-display font-semibold" style="color: var(--text-strong)">
+                      {o.label}, {o.state}
+                    </p>
+                    <address class="mt-1 text-sm leading-relaxed not-italic" style="color: var(--text-muted)">
+                      {o.street}
+                      <br />
+                      {o.city}, {o.state} {o.zip}
+                    </address>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+
+          <div class="card p-6">
+            <h2 class="font-display text-base font-semibold" style="color: var(--text-strong)">
+              Looking for something else?
+            </h2>
+            <ul class="mt-4 space-y-2.5 text-[0.9375rem]">
+              <li>
+                <a href="/careers" class="contact-link">Applying for a job</a>
+                <span style="color: var(--text-muted)"> — see open roles</span>
+              </li>
+              <li>
+                <a href="https://ustsportal.powerappsportals.com/contractors/" class="contact-link" rel="noopener">
+                  Subcontractor onboarding
+                </a>
+                <span style="color: var(--text-muted)"> — quote, W-9 and COI</span>
+              </li>
+              <li>
+                <a href="/employees" class="contact-link">Current employee</a>
+                <span style="color: var(--text-muted)"> — My Nexus and Nexus</span>
+              </li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .contact-link {
+    color: var(--accent);
+  }
+  .contact-link:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>

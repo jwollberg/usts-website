@@ -1,0 +1,247 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { yearsInBusiness } from '../../content/site';
+
+const benefits = [
+  {
+    title: 'Get trained, not thrown in',
+    body: 'New technicians work alongside experienced crew leaders. We pay for the certifications the job needs.',
+  },
+  {
+    title: 'Real career steps',
+    body: 'Tower Tech 1 to Tech 2 to Crew Leader to Construction Manager. The ladder is real and people climb it.',
+  },
+  {
+    title: 'Work that stands up',
+    body: 'The site you build carries somebody’s 911 call. There is a reason to do it right, and you can see it from the road.',
+  },
+  {
+    title: 'Paid travel and per diem',
+    body: 'Travel work is paid as travel work. You know the schedule before you commit to it.',
+  },
+];
+---
+
+<Base
+  title="Careers"
+  description="Open roles at US Telecom Services — tower technicians, crew leaders, electricians, fiber techs and project managers across California, Arizona and Utah."
+>
+  <PageHeader
+    eyebrow="Careers"
+    title="Build something that stays up."
+    lead={`We hire people who want a trade, not a temp job — then we train them. ${yearsInBusiness} years of doing it that way says it works.`}
+  />
+
+  {/* ---------------------------------------------------------- Open positions */}
+  <section class="py-20 sm:py-24" aria-labelledby="openings-heading">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div class="max-w-2xl">
+          <p class="eyebrow">Open positions</p>
+          <h2 id="openings-heading" class="mt-5 text-4xl sm:text-5xl">Where we need people now.</h2>
+        </div>
+        <a href="/careers/apply" class="btn btn-primary flex-none">Apply now</a>
+      </div>
+
+      <div id="openings" class="mt-12" data-state="loading">
+        {/* Loading skeleton — replaced once /api/openings resolves. */}
+        <ul class="grid gap-px sm:grid-cols-2 lg:grid-cols-3" style="background: var(--line)" aria-hidden="true">
+          {
+            [0, 1, 2, 3, 4, 5].map(() => (
+              <li class="p-7" style="background: var(--surface)">
+                <div class="h-3 w-20 animate-pulse rounded-sm" style="background: var(--line-strong)" />
+                <div class="mt-4 h-5 w-44 animate-pulse rounded-sm" style="background: var(--line-strong)" />
+                <div class="mt-3 h-3 w-28 animate-pulse rounded-sm" style="background: var(--line)" />
+              </li>
+            ))
+          }
+        </ul>
+        <p class="sr-only" role="status" id="openings-status">Loading open positions…</p>
+      </div>
+
+      <noscript>
+        <div class="card mt-12 p-8">
+          <p class="leading-relaxed" style="color: var(--text-body)">
+            Our live list of openings needs JavaScript. You can still
+            <a href="/careers/apply" class="careers-link">submit an application</a> — tell us the role and
+            market you are after and a recruiter will get back to you.
+          </p>
+        </div>
+      </noscript>
+    </div>
+  </section>
+
+  {/* ----------------------------------------------------------------- Culture */}
+  <section class="border-y py-20 sm:py-28" style="background: var(--surface-sunken); border-color: var(--line)">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <div class="max-w-2xl">
+        <p class="eyebrow">Why here</p>
+        <h2 class="mt-5 text-4xl sm:text-5xl">What you get out of it.</h2>
+      </div>
+      <ul class="mt-14 grid gap-px sm:grid-cols-2 lg:grid-cols-4" style="background: var(--line)">
+        {
+          benefits.map((b) => (
+            <li class="p-8" style="background: var(--surface-sunken)">
+              <h3 class="font-display text-lg">{b.title}</h3>
+              <p class="mt-3 text-[0.9375rem] leading-relaxed" style="color: var(--text-body)">
+                {b.body}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  {/* ---------------------------------------------------------------- Process */}
+  <section class="py-20 sm:py-28">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <div class="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
+        <div>
+          <p class="eyebrow">How hiring works</p>
+          <h2 class="mt-5 text-4xl sm:text-5xl">No black holes.</h2>
+          <a href="/careers/apply" class="btn btn-primary mt-8">Start your application</a>
+        </div>
+        <ol class="space-y-px" style="background: var(--line)">
+          {
+            [
+              ['Apply', 'Fifteen minutes, and you can save and come back to it. A resume helps but is not required.'],
+              ['Phone screen', 'A recruiter calls to talk through experience, pay expectations and when you could start.'],
+              ['Interview', 'Usually one conversation with the hiring manager for the market you would work in.'],
+              ['Offer and checks', 'A written offer, then the pre-employment driving, criminal and drug checks.'],
+              ['First day', 'Onboarding, gear and your crew assignment.'],
+            ].map(([title, body], i) => (
+              <li class="flex gap-6 p-6 sm:p-7" style="background: var(--surface)">
+                <span
+                  class="flex h-9 w-9 flex-none items-center justify-center rounded-full font-display text-sm font-bold"
+                  style="background: var(--surface-sunken); color: var(--brand)"
+                  aria-hidden="true"
+                >
+                  {i + 1}
+                </span>
+                <div>
+                  <h3 class="font-display text-lg">{title}</h3>
+                  <p class="mt-1.5 leading-relaxed" style="color: var(--text-body)">
+                    {body}
+                  </p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  type Opening = {
+    id: string;
+    requisitionNumber: string;
+    position: string;
+    market: string;
+    office: string;
+    city: string;
+    state: string;
+    openings: number;
+  };
+
+  const host = document.getElementById('openings');
+  const status = document.getElementById('openings-status');
+  if (!host) throw new Error('openings host missing');
+
+  const esc = (s: string) =>
+    String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+
+  function render(list: Opening[]) {
+    if (!list.length) {
+      host!.dataset.state = 'empty';
+      host!.innerHTML = `
+        <div class="card p-8">
+          <h3 class="font-display text-xl">No postings open right now.</h3>
+          <p class="mt-3 leading-relaxed" style="color: var(--text-body)">
+            Crews change fast and roles open with little notice. Send an application anyway — we keep them
+            on file and a recruiter will reach out when something matches.
+          </p>
+          <a href="/careers/apply" class="btn btn-primary mt-6">Submit an application</a>
+        </div>`;
+      if (status) status.textContent = 'No open positions at the moment.';
+      return;
+    }
+
+    // Group by market so people scan for where they live.
+    const byMarket = new Map<string, Opening[]>();
+    for (const o of list) {
+      const key = o.market || 'Other';
+      if (!byMarket.has(key)) byMarket.set(key, []);
+      byMarket.get(key)!.push(o);
+    }
+
+    host!.dataset.state = 'ready';
+    host!.innerHTML = [...byMarket.entries()]
+      .map(
+        ([market, roles]) => `
+        <section class="mb-12">
+          <h3 class="font-display text-xs font-semibold uppercase tracking-[0.14em]" style="color: var(--text-muted)">
+            ${esc(market)} &middot; ${roles.length} ${roles.length === 1 ? 'role' : 'roles'}
+          </h3>
+          <ul class="mt-5 grid gap-px sm:grid-cols-2 lg:grid-cols-3" style="background: var(--line)">
+            ${roles
+              .map(
+                (r) => `
+              <li class="p-7" style="background: var(--surface)">
+                <p class="font-display text-xs font-semibold uppercase tracking-[0.14em]" style="color: var(--accent)">
+                  Req ${esc(r.requisitionNumber)}
+                </p>
+                <h4 class="mt-2 font-display text-lg">${esc(r.position)}</h4>
+                <p class="mt-1.5 text-sm" style="color: var(--text-muted)">
+                  ${esc(r.city)}${r.state ? ', ' + esc(r.state) : ''}
+                  ${r.openings > 1 ? ` &middot; ${r.openings} openings` : ''}
+                </p>
+                <a href="/careers/apply?req=${encodeURIComponent(r.requisitionNumber)}"
+                   class="apply-link mt-5 inline-flex items-center gap-2 font-display text-sm font-semibold">
+                  Apply for this role
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M3 8h10m0 0-4-4m4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/>
+                  </svg>
+                </a>
+              </li>`
+              )
+              .join('')}
+          </ul>
+        </section>`
+      )
+      .join('');
+    if (status) status.textContent = `${list.length} open positions.`;
+  }
+
+  fetch('/api/openings')
+    .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+    .then((d) => render(d.openings ?? []))
+    .catch(() => {
+      host!.dataset.state = 'error';
+      host!.innerHTML = `
+        <div class="card p-8">
+          <h3 class="font-display text-xl">We could not load the live list.</h3>
+          <p class="mt-3 leading-relaxed" style="color: var(--text-body)">
+            That is on us, not you. Send an application and a recruiter will follow up with what is open.
+          </p>
+          <a href="/careers/apply" class="btn btn-primary mt-6">Submit an application</a>
+        </div>`;
+      if (status) status.textContent = 'Open positions could not be loaded.';
+    });
+</script>
+
+<style>
+  .careers-link,
+  :global(.apply-link) {
+    color: var(--accent);
+  }
+  :global(.apply-link) {
+    transition: gap 0.18s var(--ease-out-quint);
+  }
+  :global(.apply-link:hover) {
+    gap: 0.75rem;
+  }
+</style>

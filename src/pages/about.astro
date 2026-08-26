@@ -1,0 +1,153 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { site, offices, yearsInBusiness } from '../content/site';
+
+const values = [
+  {
+    title: 'Do it right',
+    body: 'High-quality work is the standard, not the goal. If it will not pass inspection, it does not leave the site.',
+  },
+  {
+    title: 'Be honest',
+    body: 'When a job gets hard, we say so early. Bad news travels fast here, which is why schedules stay believable.',
+  },
+  {
+    title: 'Work as a crew',
+    body: 'Nobody on a tower succeeds alone. Our purpose unites individuals into a team pulling toward the same goal.',
+  },
+  {
+    title: 'Look after people',
+    body: 'Certified climbers, real training, and a safety culture that has no interest in shortcuts. Everyone goes home.',
+  },
+];
+---
+
+<Base
+  title="About"
+  description="Founded in 2002, US Telecom Services is a wireless infrastructure contractor serving the major carriers, tower owners and OEMs across California, Arizona and Utah."
+>
+  <PageHeader
+    eyebrow="About us"
+    title={`${yearsInBusiness} years keeping people connected.`}
+    lead="US Telecom Services was founded on a simple premise: access to communication is a basic human need, and somebody has to build the thing that carries it."
+  />
+
+  {/* ----------------------------------------------------------------- History */}
+  <section class="py-20 sm:py-28">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <div class="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
+        <div>
+          <p class="eyebrow">Our history</p>
+          <h2 class="mt-5 text-4xl sm:text-5xl">Since {site.founded}.</h2>
+        </div>
+        <div class="prose-usts max-w-2xl text-lg" style="color: var(--text-body)">
+          <p>
+            We started in {site.founded} focused on cellular towers, under the name US Tower Services — still
+            our legal name today. Since then we have grown alongside the carriers and equipment makers we
+            serve, through every major step the industry has taken.
+          </p>
+          <p>
+            The work has changed a great deal. Analog gave way to digital, digital to LTE, LTE to 5G;
+            towers were joined by small cells, fiber and edge compute. What has not changed is the
+            expectation that the network is simply there when someone needs it — and the crews who make
+            that true.
+          </p>
+          <p>
+            <strong>We have a passion for doing things the right way.</strong> That means services that help
+            our customers innovate and grow, delivered by people who take the craft seriously.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ------------------------------------------------------------------ Values */}
+  <section class="border-y py-20 sm:py-28" style="background: var(--surface-sunken); border-color: var(--line)">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <div class="max-w-2xl">
+        <p class="eyebrow">What we stand for</p>
+        <h2 class="mt-5 text-4xl sm:text-5xl">Our purpose, in practice.</h2>
+        <p class="mt-5 text-lg leading-relaxed" style="color: var(--text-body)">
+          None of this would be possible without the bright, hard-working people who build and maintain a
+          strong cellular network. These are the things we ask of each other.
+        </p>
+      </div>
+
+      <ol class="mt-14 grid gap-px sm:grid-cols-2 lg:grid-cols-4" style="background: var(--line)">
+        {
+          values.map((v, i) => (
+            <li class="p-8" style="background: var(--surface-sunken)">
+              <p class="font-display text-sm font-bold tabular-nums" style="color: var(--accent)">
+                {String(i + 1).padStart(2, '0')}
+              </p>
+              <h3 class="mt-4 font-display text-lg">{v.title}</h3>
+              <p class="mt-3 text-[0.9375rem] leading-relaxed" style="color: var(--text-body)">
+                {v.body}
+              </p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  {/* ----------------------------------------------------------------- Offices */}
+  <section class="py-20 sm:py-28" aria-labelledby="offices-heading">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <div class="max-w-2xl">
+        <p class="eyebrow">Where to find us</p>
+        <h2 id="offices-heading" class="mt-5 text-4xl sm:text-5xl">Offices</h2>
+        <p class="mt-5 text-lg leading-relaxed" style="color: var(--text-body)">
+          We run crews out of the markets they serve, so mobilization is measured in hours rather than days.
+        </p>
+      </div>
+
+      <ul class="mt-14 grid gap-px sm:grid-cols-2 lg:grid-cols-4" style="background: var(--line)">
+        {
+          offices.map((o) => (
+            <li class="p-8" style="background: var(--surface)">
+              <p class="font-display text-xs font-semibold tracking-[0.14em] uppercase" style="color: var(--accent)">
+                {o.note}
+              </p>
+              <h3 class="mt-3 font-display text-xl">
+                {o.label}, {o.state}
+              </h3>
+              <address class="mt-3 text-[0.9375rem] leading-relaxed not-italic" style="color: var(--text-muted)">
+                {o.street}
+                <br />
+                {o.city}, {o.state} {o.zip}
+              </address>
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${o.street}, ${o.city}, ${o.state} ${o.zip}`)}`}
+                class="map-link mt-4 inline-flex items-center gap-1.5 font-display text-sm font-semibold"
+                rel="noopener"
+                target="_blank"
+              >
+                Directions
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8h10m0 0-4-4m4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" />
+                </svg>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="mt-10 text-sm leading-relaxed" style="color: var(--text-muted)">
+        Legal entity: {site.legalName}, a Montana corporation. Mailing address {site.mailing.street},{' '}
+        {site.mailing.city}, {site.mailing.state} {site.mailing.zip}. “US Telecom Services” is our trading
+        name.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .map-link {
+    color: var(--accent);
+  }
+  .map-link:hover {
+    color: var(--accent-hover);
+  }
+</style>

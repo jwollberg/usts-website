@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import { nav } from '../content/site';
+---
+
+<Base title="Page not found" description="That page doesn’t exist." noindex={true} hideCta={true}>
+  <section class="mx-auto flex max-w-3xl flex-col items-start px-5 py-24 sm:px-8 sm:py-32">
+    <p class="eyebrow">Error 404</p>
+    <h1 class="mt-5 text-5xl sm:text-6xl">This page isn’t here.</h1>
+    <p class="mt-5 text-lg leading-relaxed" style="color: var(--text-body)">
+      The link may be old, or we may have moved something. Here is where most people are headed:
+    </p>
+    <ul class="mt-8 flex flex-wrap gap-2.5">
+      {
+        [{ label: 'Home', href: '/' }, ...nav, { label: 'Employees', href: '/employees' }].map((item) => (
+          <li>
+            <a href={item.href} class="btn btn-outline">
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <a href="/contact" class="btn btn-primary mt-10">Tell us what you were looking for</a>
+  </section>
+</Base>

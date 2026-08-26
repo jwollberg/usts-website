@@ -1,0 +1,30 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+}
+const { eyebrow, title, lead } = Astro.props;
+---
+
+<section class="relative overflow-hidden border-b" style="background: var(--color-navy-900); border-color: var(--line)">
+  <div class="grid-lines absolute inset-0" aria-hidden="true"></div>
+  <div
+    class="pointer-events-none absolute -top-56 left-1/2 h-[36rem] w-[36rem] -translate-x-1/2 rounded-full opacity-20 blur-3xl"
+    style="background: radial-gradient(circle, var(--color-navy-400), transparent 70%)"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="relative mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24">
+    <p class="eyebrow eyebrow-invert">{eyebrow}</p>
+    <h1 class="mt-5 max-w-4xl text-4xl sm:text-5xl lg:text-6xl" style="color: #fff">{title}</h1>
+    {
+      lead && (
+        <p class="mt-6 max-w-2xl text-lg leading-relaxed sm:text-xl" style="color: var(--text-on-invert-muted)">
+          {lead}
+        </p>
+      )
+    }
+  </div>
+</section>

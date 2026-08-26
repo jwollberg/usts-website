@@ -1,0 +1,30 @@
+{
+  "name": "usts-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "US Telecom Services public website (usts1.com)",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "swa:start": "swa start http://localhost:4321 --run \"pnpm dev\" --api-location api"
+  },
+  "dependencies": {
+    "@astrojs/react": "^6.0.4",
+    "@astrojs/sitemap": "^3.7.3",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "7.2.6",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "playwright-core": "^1.62.1",
+    "sharp": "^0.35.3",
+    "typescript": "^5.9.3"
+  }
+}

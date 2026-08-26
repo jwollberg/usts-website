@@ -1,0 +1,123 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { site } from '../content/site';
+
+const updated = 'August 2026';
+---
+
+<Base
+  title="Privacy notice"
+  description="How US Telecom Services collects, uses and protects the information you send through this website."
+  hideCta={true}
+>
+  <PageHeader eyebrow="Legal" title="Privacy notice" lead={`Last updated ${updated}.`} />
+
+  <section class="py-16 sm:py-24">
+    <div class="mx-auto max-w-3xl px-5 sm:px-8">
+      <div class="prose-usts text-lg" style="color: var(--text-body)">
+        <p>
+          This notice covers <strong>www.usts1.com</strong>, operated by {site.legalName} (trading as
+          US Telecom Services). It explains what we collect through this website and what we do with it.
+        </p>
+
+        <h2 class="mt-12 text-2xl">What we collect</h2>
+        <p>Only what you type into a form. There are two:</p>
+        <ul class="mt-4 list-disc space-y-2 pl-6">
+          <li>
+            <strong>The contact form</strong> — your name, company, email, phone, the topic you pick and your
+            message.
+          </li>
+          <li>
+            <strong>The employment application</strong> — your name and contact details, home address, work
+            eligibility answers, the role and market you want, your experience, pay expectation, education,
+            availability, employment history, driving and transportation answers, how you heard about us,
+            and your resume if you attach one.
+          </li>
+        </ul>
+        <p>
+          <strong>We deliberately do not ask for your Social Security number, date of birth or gender on
+          this website.</strong> If we make you a conditional offer, that information is collected later
+          through our internal onboarding process, where it belongs.
+        </p>
+        <p>
+          We do not run advertising trackers or third-party analytics on this site, and we do not sell or
+          rent your information to anyone.
+        </p>
+
+        <h2 class="mt-12 text-2xl">Why we hold it and for how long</h2>
+        <p>
+          Contact messages are used to answer you and are kept as ordinary business correspondence.
+          Applications go into our internal recruiting system so our hiring team can assess you, contact
+          you, and consider you for later openings. If you would rather we did not keep your application on
+          file, say so and we will remove it.
+        </p>
+
+        <h2 class="mt-12 text-2xl">Text messages</h2>
+        <p>
+          If you tick the box on the application, we may send you automated texts about your application.
+          Message and data rates may apply. Reply <strong>STOP</strong> at any time to opt out — it does not
+          affect how we consider your application.
+        </p>
+
+        <h2 class="mt-12 text-2xl">Who else sees it</h2>
+        <p>
+          Our staff who need it, and the service providers who run our systems on our behalf — principally
+          Microsoft, which hosts this website and our business applications in the United States. We share
+          information otherwise only where the law requires it.
+        </p>
+
+        <h2 class="mt-12 text-2xl">How it is protected</h2>
+        <p>
+          The site is served over HTTPS. Form submissions travel encrypted and are written directly into our
+          internal systems, which are access-controlled and require multi-factor authentication. The account
+          this website uses to file your application can create an applicant record and read the list of open
+          roles — nothing else.
+        </p>
+
+        <h2 class="mt-12 text-2xl">Cookies</h2>
+        <p>
+          This site sets no tracking or advertising cookies. The application form saves your progress in your
+          own browser's local storage so you can come back to a part-finished application; that data stays on
+          your device and is cleared when you submit.
+        </p>
+
+        <h2 class="mt-12 text-2xl">Your choices</h2>
+        <p>
+          You can ask us what we hold about you, ask us to correct it, or ask us to delete it. Email{' '}
+          <a href={`mailto:${site.email}`} class="privacy-link">{site.email}</a> and we will respond.
+          Depending on where you live you may have additional rights under state law, including in
+          California — we will honor those requests regardless of where you live.
+        </p>
+
+        <h2 class="mt-12 text-2xl">Equal opportunity</h2>
+        <p>
+          US Telecom Services is an equal opportunity employer. We do not discriminate on the basis of race,
+          color, religion, sex, sexual orientation, gender identity, national origin, age, disability,
+          veteran status, or any other characteristic protected by law.
+        </p>
+
+        <h2 class="mt-12 text-2xl">Contact</h2>
+        <p>
+          {site.legalName}
+          <br />
+          {site.mailing.street}, {site.mailing.city}, {site.mailing.state} {site.mailing.zip}
+          <br />
+          <a href={`mailto:${site.email}`} class="privacy-link">{site.email}</a> &middot;{' '}
+          <a href={`tel:${site.phoneHref}`} class="privacy-link">{site.phone}</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .privacy-link {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .prose-usts h2 {
+    color: var(--text-strong);
+  }
+</style>

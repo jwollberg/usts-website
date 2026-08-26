@@ -1,0 +1,53 @@
+---
+import Base from '../../layouts/Base.astro';
+import ApplyForm from '../../components/apply/ApplyForm';
+---
+
+<Base
+  title="Apply"
+  description="Apply to join the crew at US Telecom Services. Fifteen minutes, and you can save your progress and come back."
+  hideCta={true}
+>
+  <section class="border-b" style="background: var(--surface-sunken); border-color: var(--line)">
+    <div class="mx-auto max-w-3xl px-5 py-14 sm:px-8 sm:py-16">
+      <a href="/careers" class="back-link inline-flex items-center gap-2 font-display text-sm font-semibold">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M13 8H3m0 0 4-4M3 8l4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"></path>
+        </svg>
+        All open roles
+      </a>
+      <h1 class="mt-6 text-4xl sm:text-5xl">Apply</h1>
+      <p class="mt-4 text-lg leading-relaxed" style="color: var(--text-body)">
+        About fifteen minutes. Your answers save as you go, so you can stop and pick it back up on this
+        device. A resume helps but is not required.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-14 sm:py-16">
+    <div class="mx-auto max-w-3xl px-5 sm:px-8">
+      <ApplyForm client:load />
+    </div>
+  </section>
+
+  <section class="border-t py-12" style="border-color: var(--line)">
+    <div class="mx-auto max-w-3xl px-5 sm:px-8">
+      <p class="text-sm leading-relaxed" style="color: var(--text-muted)">
+        US Telecom Services is an equal opportunity employer. We do not discriminate on the basis of race,
+        color, religion, sex, sexual orientation, gender identity, national origin, age, disability,
+        veteran status, or any other characteristic protected by law. If you need an accommodation to
+        complete this application, email{' '}
+        <a href="mailto:info@usts1.com" class="back-link">info@usts1.com</a> and we will help.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .back-link {
+    color: var(--accent);
+  }
+  .back-link:hover {
+    color: var(--accent-hover);
+  }
+</style>

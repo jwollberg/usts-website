@@ -1,0 +1,49 @@
+---
+import { site } from '../content/site';
+
+interface Props {
+  heading?: string;
+  body?: string;
+}
+
+const {
+  heading = 'Let’s talk about your next build.',
+  body = 'Scoping a program, chasing a deadline, or need a crew on site this week — tell us what you’re working on and we’ll come back with a real answer.',
+} = Astro.props;
+---
+
+<section class="relative overflow-hidden" style="background: var(--color-navy-900)" aria-labelledby="cta-heading">
+  <div class="grid-lines absolute inset-0" aria-hidden="true"></div>
+  <div
+    class="pointer-events-none absolute -top-40 -right-32 h-[28rem] w-[28rem] rounded-full opacity-20 blur-3xl"
+    style="background: radial-gradient(circle, var(--color-flag-500), transparent 70%)"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="relative mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24">
+    <div class="grid items-end gap-10 lg:grid-cols-[1.5fr_1fr]">
+      <div>
+        <p class="eyebrow eyebrow-invert">Get in touch</p>
+        <h2 id="cta-heading" class="mt-5 max-w-2xl text-4xl sm:text-5xl" style="color: #fff">
+          {heading}
+        </h2>
+        <p class="mt-5 max-w-xl text-lg leading-relaxed" style="color: var(--text-on-invert-muted)">
+          {body}
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-3 sm:flex-row lg:flex-col lg:items-stretch">
+        <a href="/contact" class="btn btn-primary">Request a quote</a>
+        <a href="/careers" class="btn btn-ghost-invert">Join the team</a>
+        <a
+          href={`mailto:${site.email}`}
+          class="text-center font-display text-sm font-medium tracking-wide sm:self-center lg:mt-1"
+          style="color: var(--text-on-invert-muted)"
+        >
+          {site.email}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

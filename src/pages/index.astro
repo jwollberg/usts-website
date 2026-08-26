@@ -1,0 +1,247 @@
+---
+import Base from '../layouts/Base.astro';
+import HeroGraphic from '../components/HeroGraphic.astro';
+import { site, services, stats, offices, yearsInBusiness } from '../content/site';
+---
+
+<Base title="home">
+  {/* ---------------------------------------------------------------- Hero */}
+  <section class="relative overflow-hidden" style="background: var(--color-navy-900)">
+    <div class="grid-lines absolute inset-0" aria-hidden="true"></div>
+    <div
+      class="pointer-events-none absolute top-0 right-0 h-[40rem] w-[40rem] translate-x-1/4 -translate-y-1/4 rounded-full opacity-25 blur-3xl"
+      style="background: radial-gradient(circle, var(--color-navy-500), transparent 70%)"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="relative mx-auto max-w-7xl px-5 sm:px-8">
+      <div class="grid items-center gap-12 py-20 sm:py-24 lg:grid-cols-[1.15fr_1fr] lg:gap-8 lg:py-32">
+        <div>
+          <p class="eyebrow eyebrow-invert">Wireless infrastructure contractor</p>
+          <h1 class="mt-6 text-5xl leading-[0.95] sm:text-6xl lg:text-7xl" style="color: #fff">
+            Keeping people<br />connected.
+          </h1>
+          <p class="mt-7 max-w-xl text-lg leading-relaxed sm:text-xl" style="color: var(--text-on-invert-muted)">
+            We build and maintain the cell towers, small cells, fiber and power that carry the country’s
+            calls, its data and its 911 traffic. For the major carriers, tower owners and OEMs — since {site.founded}.
+          </p>
+
+          <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+            <a href="/contact" class="btn btn-primary">Request a quote</a>
+            <a href="/services" class="btn btn-ghost-invert">See what we do</a>
+          </div>
+
+          <p class="mt-10 flex items-center gap-3 text-sm" style="color: var(--text-on-invert-muted)">
+            <span class="inline-block h-1.5 w-1.5 rounded-full" style="background: var(--color-flag-500)"></span>
+            Licensed, insured and climbing-certified crews in three states
+          </p>
+        </div>
+
+        <div class="hidden justify-center lg:flex">
+          <HeroGraphic />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ------------------------------------------------------------ Who we serve */}
+  <section class="border-b" style="background: var(--surface-sunken); border-color: var(--line)">
+    <div class="mx-auto max-w-7xl px-5 py-12 sm:px-8">
+      <div class="flex flex-col gap-6 md:flex-row md:items-center md:gap-12">
+        <p
+          class="flex-none font-display text-xs font-semibold tracking-[0.14em] uppercase"
+          style="color: var(--text-muted)"
+        >
+          Who we work for
+        </p>
+        <div class="h-px flex-1 md:h-8 md:w-px md:flex-none" style="background: var(--line-strong)"></div>
+        <p class="text-lg leading-relaxed" style="color: var(--text-body)">
+          All of the major U.S. wireless carriers, the national tower owners, and the equipment OEMs behind
+          them — through every generation from analog to <strong style="color: var(--text-strong)">5G</strong>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* ---------------------------------------------------------------- Stats */}
+  <section class="border-b" style="border-color: var(--line)">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <dl class="grid grid-cols-2 lg:grid-cols-4">
+        {
+          stats.map((s, i) => (
+            <div
+              class:list={[
+                'border-b px-1 py-10 sm:px-6 lg:border-b-0',
+                i % 2 === 1 && 'border-l pl-6 sm:pl-8',
+                i > 0 && 'lg:border-l lg:pl-8',
+              ]}
+              style="border-color: var(--line)"
+            >
+              <dd class="font-display text-4xl font-bold sm:text-5xl" style="color: var(--brand)">
+                {s.value}
+              </dd>
+              <dt class="mt-3 font-display text-sm font-semibold" style="color: var(--text-strong)">
+                {s.label}
+              </dt>
+              <p class="mt-1.5 text-sm leading-relaxed" style="color: var(--text-muted)">
+                {s.detail}
+              </p>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  {/* -------------------------------------------------------------- Services */}
+  <section class="py-20 sm:py-28" aria-labelledby="services-heading">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div class="max-w-2xl">
+          <p class="eyebrow">What we do</p>
+          <h2 id="services-heading" class="mt-5 text-4xl sm:text-5xl">End-to-end wireless, one contractor.</h2>
+          <p class="mt-5 text-lg leading-relaxed" style="color: var(--text-body)">
+            From the first SOW review to the closeout package, we self-perform the work rather than
+            brokering it out — which is why our cycle times hold and our documentation lands right the first
+            time.
+          </p>
+        </div>
+        <a href="/services" class="btn btn-outline flex-none">All services</a>
+      </div>
+
+      <ul class="mt-14 grid gap-px sm:grid-cols-2 lg:grid-cols-3" style="background: var(--line)">
+        {
+          services.map((s) => (
+            <li class="group p-8" style="background: var(--surface)">
+              <h3 class="font-display text-xl">{s.title}</h3>
+              <p class="mt-3 text-[0.9375rem] leading-relaxed" style="color: var(--text-body)">
+                {s.summary}
+              </p>
+              <a
+                href={`/services#${s.slug}`}
+                class="service-link mt-5 inline-flex items-center gap-2 font-display text-sm font-semibold"
+              >
+                Details
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path
+                    d="M3 8h10m0 0-4-4m4 4-4 4"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                    stroke-linecap="square"
+                  />
+                </svg>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  {/* --------------------------------------------------------------- Purpose */}
+  <section class="border-y py-20 sm:py-28" style="background: var(--surface-sunken); border-color: var(--line)">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <div class="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
+        <div>
+          <p class="eyebrow">Our purpose</p>
+          <h2 class="mt-5 text-4xl sm:text-5xl">Why the work matters.</h2>
+        </div>
+        <div class="prose-usts max-w-2xl text-lg" style="color: var(--text-body)">
+          <p>
+            The time we live in is genuinely remarkable. Everything we could want to watch or read is at our
+            fingertips. We carry our friends and family with us wherever we go. And when something goes
+            wrong, reaching help is instant and reliable.
+          </p>
+          <p>
+            None of it happens without the people who build and maintain a strong cellular network —
+            climbing in the heat, driving through the night, standing up temporary sites when a storm takes
+            the permanent one out.
+          </p>
+          <p>
+            <strong>That purpose sets our standard.</strong> It pushes us toward high-quality work, it asks
+            for honesty and cooperation when a job gets hard, and it turns a group of individuals into a
+            crew working toward the same thing.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* -------------------------------------------------------------- Coverage */}
+  <section class="py-20 sm:py-28" aria-labelledby="coverage-heading">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <div class="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
+        <div>
+          <p class="eyebrow">Where we work</p>
+          <h2 id="coverage-heading" class="mt-5 text-4xl sm:text-5xl">Three markets, one standard.</h2>
+          <p class="mt-5 text-lg leading-relaxed" style="color: var(--text-body)">
+            Crews and equipment based in the markets they serve, so mobilization is measured in hours rather
+            than days. We support local, state and federal code requirements everywhere we operate and
+            partner with jurisdictions to keep permits moving.
+          </p>
+          <a href="/contact" class="btn btn-secondary mt-8">Talk to an office</a>
+        </div>
+
+        <ul class="grid gap-px sm:grid-cols-2" style="background: var(--line)">
+          {
+            offices.map((o) => (
+              <li class="p-7" style="background: var(--surface)">
+                <p class="font-display text-xs font-semibold tracking-[0.14em] uppercase" style="color: var(--accent)">
+                  {o.market}
+                </p>
+                <h3 class="mt-2 font-display text-lg">
+                  {o.label}, {o.state}
+                </h3>
+                <p class="mt-2 text-sm leading-relaxed" style="color: var(--text-muted)">
+                  {o.street}
+                  <br />
+                  {o.city}, {o.state} {o.zip}
+                </p>
+                <p class="mt-3 text-xs font-medium tracking-wide uppercase" style="color: var(--text-muted)">
+                  {o.note}
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {/* --------------------------------------------------------------- Careers */}
+  <section class="border-t py-20 sm:py-24" style="border-color: var(--line)">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8">
+      <div
+        class="relative overflow-hidden rounded-sm border p-10 sm:p-14"
+        style="border-color: var(--line); background: var(--surface-sunken)"
+      >
+        <div class="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-center">
+          <div>
+            <p class="eyebrow">Careers</p>
+            <h2 class="mt-5 text-3xl sm:text-4xl">Build something that stays up.</h2>
+            <p class="mt-4 max-w-2xl text-lg leading-relaxed" style="color: var(--text-body)">
+              Tower technicians, crew leaders, electricians, fiber techs and project managers — we hire
+              people who want a trade, not a temp job, and we train them. {yearsInBusiness} years of doing it
+              says it works.
+            </p>
+          </div>
+          <div class="flex flex-col gap-3 sm:flex-row lg:flex-col">
+            <a href="/careers" class="btn btn-primary">See open roles</a>
+            <a href="/careers/apply" class="btn btn-outline">Apply now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .service-link {
+    color: var(--accent);
+    transition: gap 0.18s var(--ease-out-quint);
+  }
+  .group:hover .service-link {
+    gap: 0.75rem;
+  }
+</style>
