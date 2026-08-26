@@ -205,33 +205,39 @@ Every step reverses in a minute:
 
 # Remaining
 
-### 1. The bare domain (`ustelecomservices.com`) — waiting on Azure
+### 1. The bare domain — one record left ✅ READY FOR YOU
 
-The `TXT @` record is in and correct. Azure is validating; once it completes we
-send you an IP to replace the `A @ Parked` row, and the bare domain will serve
-the site. Nothing for you to do until then.
+Azure has validated `ustelecomservices.com` and issued its address. Replace the
+parked record:
 
-After it goes live, the `TXT _dnsauth.www` record can be deleted — it is the
-same value in the wrong place and is no longer doing anything.
+| Action | Type | Name | Value | TTL |
+|---|---|---|---|---|
+| **Edit** | `A` | `@` | `172.169.198.52` | 600 |
 
-### 2. `ustowerservicesinc.com` is forwarding to itself
+That row currently reads "Parked". Change its value to the IP above — that is the
+last step; the bare domain will then serve the site over HTTPS.
 
-The Wix records are gone — good. But the forward is currently set to
-`https://www.ustowerservicesinc.com`, which points back at the same domain rather
-than at the new site:
+Afterwards you can delete `TXT _dnsauth.www` — it is the same value in the wrong
+place and is no longer doing anything. Keep the `TXT @` one.
 
-```
-http://ustowerservicesinc.com
-  → https://ustowerservicesinc.com
-  → https://www.ustowerservicesinc.com    ← dead end
-```
+**Do not re-enable Domain Forwarding on this domain.** It would take the `www`
+record back over.
 
-**Change the forwarding destination to `https://www.ustelecomservices.com`.**
-If GoDaddy offers a "forward to www" option, make sure it is pointing at the new
-domain and not at this one.
+### 2. `ustowerservicesinc.com` ✅ DONE
 
-### 3. Email address ✅ DONE
+Forwarding now points at `http://www.ustelecomservices.com`. It may take a little
+while to show up — the old destination is still cached at some resolvers.
 
-`info@ustelecomservices.com` now reaches the same **Info** distribution list as
-`info@usts1.com` and `info@ustowerservicesinc.com`. The website and its contact
-form have been switched over to it.
+Worth tightening when convenient: point it at `https://` rather than `http://` so
+visitors take one hop fewer.
+
+### 3. Email ✅ DONE
+
+`ustelecomservices.com` is verified, mail-enabled, and every mailbox now carries
+an `@ustelecomservices.com` address alongside its existing one. The website and
+its contact form use `info@ustelecomservices.com`.
+
+> **People can receive at the new address but will still *send* as
+> `@usts1.com`.** Outbound uses the mailbox's primary address, and those were
+> deliberately left alone. Letting staff choose which address they send from is a
+> separate org-wide Exchange setting — ask us if you want it.
