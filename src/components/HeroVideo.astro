@@ -1,0 +1,92 @@
+---
+/**
+ * Hero background video — real USTS drone footage of crews and sites, carried
+ * over from the previous site.
+ *
+ * It sits on the right and dissolves to nothing on the left so the headline
+ * always reads against flat navy rather than against moving picture.
+ *
+ * Loading is deliberate: `preload="none"` and no `src` in the markup, so phones
+ * never pull 1.5 MB for something they cannot see. A small module attaches the
+ * source only on large screens, and never when the visitor has asked for
+ * reduced motion — for them the poster frame stands in.
+ */
+---
+
+<div class="hero-video" aria-hidden="true">
+  <video
+    id="hero-video"
+    class="hero-video__el"
+    poster="/media/hero-poster.jpg"
+    data-src="/media/hero.mp4"
+    preload="none"
+    muted
+    loop
+    playsinline
+    disablepictureinpicture
+    tabindex="-1"
+  >
+  </video>
+  <div class="hero-video__fade"></div>
+</div>
+
+<script>
+  import '../scripts/hero-video.ts';
+</script>
+
+<style>
+  .hero-video {
+    position: absolute;
+    inset: 0 0 0 34%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .hero-video__el {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Knocked back, but still legible as real work — the whole point is that
+       these are our crews on our sites. The mask and the wash below are what
+       protect the headline, so this does not need to be dimmed into mush. */
+    filter: saturate(0.9) contrast(1.04);
+    /* Dissolve into the navy on the left and soften the top and bottom edges so
+       there is no visible rectangle. */
+    -webkit-mask-image:
+      linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.35) 22%, #000 62%),
+      linear-gradient(to bottom, transparent 0%, #000 18%, #000 82%, transparent 100%);
+    mask-image:
+      linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.35) 22%, #000 62%),
+      linear-gradient(to bottom, transparent 0%, #000 18%, #000 82%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+    opacity: 0;
+    transition: opacity 1.6s var(--ease-out-quint);
+  }
+
+  /* Faded in once the first frames are actually decoded, so it never appears
+     as a black rectangle first. */
+  .hero-video__el[data-ready] {
+    opacity: 0.62;
+  }
+
+  /* A navy wash over the whole thing keeps contrast on the headline no matter
+     which frame is showing. */
+  .hero-video__fade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      var(--color-navy-900) 0%,
+      color-mix(in srgb, var(--color-navy-900) 88%, transparent) 26%,
+      color-mix(in srgb, var(--color-navy-900) 42%, transparent) 52%,
+      color-mix(in srgb, var(--color-navy-900) 8%, transparent) 100%
+    );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-video__el {
+      transition: none;
+    }
+  }
+</style>
