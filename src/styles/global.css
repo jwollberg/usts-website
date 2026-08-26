@@ -489,6 +489,19 @@
     line-height: 1;
   }
 
+  /* Hairline-separated grid.
+     Replaces the `gap-px` + coloured-background trick, which paints that colour
+     through cells the content doesn't fill — a 3-item list in a 4-column grid
+     rendered visible grey blocks. */
+  .grid-hairline {
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+  .grid-hairline > * {
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
   .prose-usts p {
     margin-block: 1.125em;
     line-height: 1.75;

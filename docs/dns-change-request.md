@@ -34,12 +34,14 @@ keeps serving normally while it happens.
 |---|---|
 | Type | `TXT` |
 | Name / Host | `_dnsauth.www` |
-| Value | *(a validation code — see below)* |
+| Value | `_zyq5qvwtcjcts7wsnhp723e7w45t4n5` |
 | TTL | leave default |
 
-> The validation code is generated per request and expires, so it is **not**
-> written down here. Ask Josh for the current code immediately before making the
-> change — it takes seconds to produce.
+> Enter the host exactly as `_dnsauth.www` — GoDaddy appends `usts1.com` for you,
+> giving `_dnsauth.www.usts1.com`. Include the leading underscore.
+>
+> If this record has been sitting unused for more than a few weeks, ask us to
+> re-issue the code before you add it — validation codes do expire.
 
 Then tell us it's done. We'll confirm the certificate has been issued before
 asking for Stage 2. **Nothing about the live site changes at this stage.**

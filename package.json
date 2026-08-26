@@ -6,7 +6,7 @@
   "description": "US Telecom Services public website (usts1.com)",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/csp-hashes.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "swa:start": "swa start http://localhost:4321 --run \"pnpm dev\" --api-location api"
