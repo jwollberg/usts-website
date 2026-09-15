@@ -1,6 +1,6 @@
 import { app, type HttpRequest, type HttpResponseInit, type InvocationContext } from '@azure/functions';
 import { dvCreate, dataverseUrl, getToken } from '../lib/dataverse.js';
-import { loadOpenings } from './openings.js';
+import { loadOpenings, matchOpening } from './openings.js';
 import {
   json,
   badRequest,
@@ -98,14 +98,19 @@ async function handler(req: HttpRequest, context: InvocationContext): Promise<Ht
 
   // The form sends a requisition number, not an id — resolve it against the
   // live list so a hand-edited query string cannot bind to an arbitrary row.
+  // A general application (no ?req= deep link) is matched to the open
+  // requisition for its role + market instead, so recruiting never has to link
+  // one by hand; `On Applicant Add` fills hiring manager and recruiter from it.
   let requisitionId: string | undefined;
   const requisitionNumber = str(body.requisitionNumber, 30);
-  if (requisitionNumber) {
-    try {
-      requisitionId = (await loadOpenings()).find((o) => o.requisitionNumber === requisitionNumber)?.id || undefined;
-    } catch {
-      /* a requisition we cannot resolve is not worth failing the application over */
-    }
+  try {
+    const openings = await loadOpenings();
+    const opening = requisitionNumber
+      ? openings.find((o) => o.requisitionNumber === requisitionNumber)
+      : matchOpening(openings, positionId, marketId, officeId);
+    requisitionId = opening?.id || undefined;
+  } catch {
+    /* a requisition we cannot resolve is not worth failing the application over */
   }
 
   /* ---- notes: keep the free-text role in the notes when lookups were down */

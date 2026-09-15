@@ -11,6 +11,10 @@ export type Opening = {
   city: string;
   state: string;
   openings: number;
+  /** Lookup ids, so a general application can be matched to an opening. */
+  positionId: string;
+  marketId: string;
+  officeId: string;
 };
 
 /**
@@ -21,7 +25,7 @@ export type Opening = {
  * AND at least one opening. Requisitions parked at zero openings stay hidden.
  */
 const QUERY =
-  'cr24f_requisitions?$select=cr24f_requisitionnumber,cr24f_openings' +
+  'cr24f_requisitions?$select=cr24f_requisitionnumber,cr24f_openings,_cr24f_position_value,_cr24f_market_value,_cr24f_office_value' +
   '&$expand=cr24f_Position($select=name),cr24f_Office($select=cr24f_name,cr24f_addresscity,cr24f_addressstate),cr24f_Market($select=cr24f_name)' +
   '&$filter=statecode eq 0 and cr24f_openings gt 0' +
   '&$orderby=cr24f_requisitionnumber asc';
@@ -34,6 +38,23 @@ const METRO: Record<string, string> = {
   'Sun Valley': 'Los Angeles',
   Gilbert: 'Phoenix',
 };
+
+/**
+ * The opening a general application belongs to: same role and market, the
+ * applicant's nearest office if it has one, else the lowest requisition number.
+ * The list is already sorted by requisition number, so "first" is that.
+ */
+export function matchOpening(
+  openings: Opening[],
+  positionId: string | undefined,
+  marketId: string | undefined,
+  officeId: string | undefined
+): Opening | undefined {
+  if (!positionId || !marketId) return undefined;
+  const eq = (a: string, b: string | undefined) => Boolean(b) && a.toLowerCase() === b!.toLowerCase();
+  const same = openings.filter((o) => eq(o.positionId, positionId) && eq(o.marketId, marketId));
+  return same.find((o) => eq(o.officeId, officeId)) ?? same[0];
+}
 
 export async function loadOpenings(): Promise<Opening[]> {
   return cached_('openings', 5 * 60_000, async () => {
@@ -51,6 +72,9 @@ export async function loadOpenings(): Promise<Opening[]> {
         '',
       state: r.cr24f_Office?.cr24f_addressstate ?? '',
       openings: Number(r.cr24f_openings ?? 0),
+      positionId: r._cr24f_position_value ?? '',
+      marketId: r._cr24f_market_value ?? '',
+      officeId: r._cr24f_office_value ?? '',
     }));
   });
 }
