@@ -18,8 +18,20 @@ import { TextField, TextArea, SelectField, ChoiceSelect, YesNo, RadioCards, Chec
 /* ------------------------------------------------------------------ types */
 
 type Ref = { id: string; name: string };
-type Opening = { id: string; requisitionNumber: string; position: string; market: string; city: string; state: string };
-type Options = { positions: Ref[]; markets: Ref[]; offices: Ref[]; openings: Opening[] };
+type Opening = {
+  id: string;
+  requisitionNumber: string;
+  position: string;
+  market: string;
+  city: string;
+  state: string;
+  positionId: string;
+  marketId: string;
+};
+type Options = { markets: Ref[]; offices: Ref[]; openings: Opening[] };
+
+/** Sentinel for "a role we are not currently advertising" — the applicant types it instead. */
+const OTHER_ROLE = 'other';
 
 type Data = {
   // 1 eligibility
@@ -253,8 +265,9 @@ function validateStep(step: number, d: Data, optionsFailed: boolean): Errors {
     if (optionsFailed) {
       if (!d.positionOther.trim()) e.positionOther = 'Tell us which role you want.';
     } else {
-      req('positionId', 'Choose the role you are applying for.');
       req('marketId', 'Choose a market.');
+      req('positionId', 'Choose the role you are applying for.');
+      if (d.positionId === OTHER_ROLE && !d.positionOther.trim()) e.positionOther = 'Tell us which role you want.';
     }
     req('experience', 'Choose your experience level.');
     req('education', 'Choose your highest level of education.');
@@ -355,14 +368,46 @@ export default function ApplyForm() {
     if (!op) return;
     setData((d) => ({
       ...d,
-      positionId: d.positionId || options.positions.find((p) => p.name === op.position)?.id || '',
-      marketId: d.marketId || options.markets.find((m) => m.name === op.market)?.id || '',
+      positionId: d.positionId || op.positionId,
+      marketId: d.marketId || op.marketId,
     }));
   }, [options, data.requisitionNumber]);
 
   const linkedOpening = useMemo(
     () => options?.openings.find((o) => o.requisitionNumber === data.requisitionNumber) ?? null,
     [options, data.requisitionNumber]
+  );
+
+  /* -------- roles on offer: one entry per position with an open requisition,
+     narrowed to the chosen market once there is one. Anything else is "Other". */
+  const roleOptions = useMemo(() => {
+    const seen = new Map<string, string>();
+    for (const o of options?.openings ?? []) {
+      if (!o.positionId || (data.marketId && o.marketId !== data.marketId)) continue;
+      if (!seen.has(o.positionId)) seen.set(o.positionId, o.position);
+    }
+    return [...seen.entries()]
+      .map(([value, label]) => ({ value, label }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [options, data.marketId]);
+
+  const roleName = (id: string) =>
+    id === OTHER_ROLE ? data.positionOther : options?.openings.find((o) => o.positionId === id)?.position ?? '—';
+
+  /* A role that is not open in the newly chosen market is cleared rather than
+     silently submitted for a market it does not exist in. */
+  const setMarket = useCallback(
+    (marketId: string) => {
+      setData((d) => {
+        const stillOpen =
+          !d.positionId ||
+          d.positionId === OTHER_ROLE ||
+          (options?.openings ?? []).some((o) => o.positionId === d.positionId && (!marketId || o.marketId === marketId));
+        return { ...d, marketId, positionId: stillOpen ? d.positionId : '' };
+      });
+      setErrors((e) => (e.marketId ? { ...e, marketId: undefined } : e));
+    },
+    [options]
   );
 
   const errorList = useMemo(
@@ -680,25 +725,39 @@ export default function ApplyForm() {
             ) : (
               <div className="grid gap-6 sm:grid-cols-2">
                 <SelectField
-                  id="positionId"
-                  label="Role you are applying for"
-                  required
-                  value={data.positionId}
-                  onChange={(v) => set('positionId', v)}
-                  error={errors.positionId}
-                  options={(options?.positions ?? []).map((p) => ({ value: p.id, label: p.name }))}
-                  placeholder={options ? 'Select a role…' : 'Loading roles…'}
-                />
-                <SelectField
                   id="marketId"
                   label="Market you want to work in"
                   required
                   value={data.marketId}
-                  onChange={(v) => set('marketId', v)}
+                  onChange={setMarket}
                   error={errors.marketId}
                   options={(options?.markets ?? []).map((m) => ({ value: m.id, label: m.name }))}
                   placeholder={options ? 'Select a market…' : 'Loading markets…'}
                 />
+                <SelectField
+                  id="positionId"
+                  label="Role you are applying for"
+                  required
+                  hint={roleOptions.length ? 'Roles we are hiring for right now.' : undefined}
+                  value={data.positionId}
+                  onChange={(v) => set('positionId', v)}
+                  error={errors.positionId}
+                  options={[...roleOptions, { value: OTHER_ROLE, label: 'Other / not listed' }]}
+                  placeholder={options ? 'Select a role…' : 'Loading roles…'}
+                />
+                {data.positionId === OTHER_ROLE && (
+                  <div className="sm:col-span-2">
+                    <TextField
+                      id="positionOther"
+                      label="Which role are you interested in?"
+                      required
+                      hint="We keep applications on file and reach out when that role opens."
+                      value={data.positionOther}
+                      onChange={(v) => set('positionOther', v)}
+                      error={errors.positionOther}
+                    />
+                  </div>
+                )}
                 <div className="sm:col-span-2">
                   <SelectField
                     id="officeId"
@@ -874,7 +933,7 @@ export default function ApplyForm() {
                   ['Email', data.email],
                   ['Phone', data.phone],
                   ['Address', [data.street1, data.street2, `${data.city}, ${data.state} ${data.zip}`].filter(Boolean).join(', ')],
-                  ['Role', optionsFailed ? data.positionOther : options?.positions.find((p) => p.id === data.positionId)?.name ?? '—'],
+                  ['Role', optionsFailed ? data.positionOther : roleName(data.positionId)],
                   ['Market', options?.markets.find((m) => m.id === data.marketId)?.name ?? '—'],
                   ['Experience', labelFor(EXPERIENCE, data.experience) || '—'],
                   ['Desired pay', data.askingPay],
