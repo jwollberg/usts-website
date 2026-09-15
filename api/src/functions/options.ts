@@ -7,7 +7,8 @@ import { loadOpenings } from './openings.js';
  * Reference data the application form needs to render its lookups.
  *
  * Only id + display name leave Dataverse — nothing else on these tables is any
- * of the public's business.
+ * of the public's business. Roles are not listed here: the form offers only the
+ * positions that have an open requisition, which it reads off `openings`.
  */
 
 type Ref = { id: string; name: string };
@@ -26,14 +27,6 @@ const METRO: Record<string, string> = {
   'Sun Valley': 'Los Angeles',
   Gilbert: 'Phoenix',
 };
-
-const loadPositions = () =>
-  cached_<Ref[]>('positions', 15 * 60_000, async () => {
-    const d = await dvGet<{ value: any[] }>('positions?$select=name,positionid&$orderby=name asc');
-    return d.value
-      .filter((p) => p.name && p.name !== 'None')
-      .map((p) => ({ id: p.positionid, name: p.name }));
-  });
 
 const loadMarkets = () =>
   cached_<Ref[]>('markets', 15 * 60_000, async () => {
@@ -63,15 +56,14 @@ const loadOffices = () =>
 
 async function handler(_req: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   try {
-    const [positions, markets, offices, openings] = await Promise.all([
-      loadPositions(),
+    const [markets, offices, openings] = await Promise.all([
       loadMarkets(),
       loadOffices(),
       loadOpenings(),
     ]);
     return {
       status: 200,
-      jsonBody: { positions, markets, offices, openings },
+      jsonBody: { markets, offices, openings },
       headers: { 'Cache-Control': 'public, max-age=300, stale-while-revalidate=900' },
     };
   } catch (err) {
